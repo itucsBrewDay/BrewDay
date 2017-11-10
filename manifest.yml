@@ -2,8 +2,8 @@ applications:
 - services:
   - ElephantSQL-ps
   disk_quota: 1024M
-  host: itucsdb15
-  name: itucsdb15
+  host: BrewDay
+  name: BrewDay
   path: .
   domain: mybluemix.net
   instances: 1
