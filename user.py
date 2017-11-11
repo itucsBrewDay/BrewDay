@@ -23,8 +23,7 @@ class UserLogin:
             hashp = pwd_context.encrypt(password)
             try:
                 cursor.execute(query, (username, hashp,))
-            except dbapi2.Error as err:
-                print(err)
+            except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
