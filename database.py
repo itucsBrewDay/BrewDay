@@ -38,7 +38,7 @@ class Database:
                                                               Name varchar(100)  NOT NULL,
                                                               Surname varchar(100)  NOT NULL,
                                                               UserName varchar(100)  NOT NULL,
-                                                              Password varchar(100)  NOT NULL,
+                                                              Password varchar(500)  NOT NULL,
                                                               Date timestamp NOT NULL,
                                                               LastLoginDate timestamp NOT NULL,
                                                               CreateDate timestamp  NOT NULL
