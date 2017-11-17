@@ -16,13 +16,14 @@ class UserLogin:
     def add_user(cls, username, password):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO UserInfo (Username, Password) VALUES (
-                                                  %s,
-                                                  %s
-                                )"""
+            query = """INSERT INTO UserInfo ( Mail, Name, Surname, UserName, Password, Date, LastLoginDate, CreateDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
             hashp = pwd_context.encrypt(password)
+            var1=   "Utku@mail"
+            var2=   "Utku Anıl"
+            var3=   "Saykara"
             try:
-                cursor.execute(query, (username, hashp,))
+                cursor.execute(query, ( var1, var2, var3, username, hashp, datetime.datetime.now(), datetime.datetime.now(), datetime.datetime.now(),))
+
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -50,7 +51,7 @@ class UserLogin:
             cursor.close()
 
             if user_data:
-                return User(id=user_data[0], username=user_data[1], password=user_data[2], lastLoginDate = user_data[3])
+                return User(id=user_data[0],  username=user_data[4], password=user_data[5],  lastLoginDate = user_data[7])
             else:
                 return -1
 

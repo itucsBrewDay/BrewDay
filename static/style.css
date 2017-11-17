@@ -1,10 +1,11 @@
+/*!
+ * Start Bootstrap - 3 Col Portfolio (https://startbootstrap.com/template-overviews/3-col-portfolio)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-3-col-portfolio/blob/master/LICENSE)
+ */
+
 body {
-    background-color: white;
-    color: #6F6F6F;
-    font-family: 'Droid Sans', 'Helvetica', 'sans';
-    font-size: 12pt;
-    margin: 2ex 2em;
-    padding-top: 54px;
+  padding-top: 54px;
 }
 
 @media (min-width: 992px) {
@@ -13,45 +14,14 @@ body {
   }
 }
 
-h1, h2, h3, h4 {
-    color: #E9601A;
-}
-
-a {
-    color: #6F6F6F;
-    text-decoration: underline;
-}
-
-div#datetime {
-    font-size: 80%;
-    text-align: right;
-}
-
-
-.navbar-default {
-    background-color: chocolate;
-}
-
-.navbar-default .navbar-nav > li > a{
-    color: white;
-}
-
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-color: black;
-}
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-color: white;
-background-color: darkred;
-}
-.navbar-default .navbar-brand{
-    color:white;
-}
-
 .portfolio-item {
   margin-bottom: 30px;
 }
 
 .pagination {
   margin-bottom: 30px;
+}
+
+h1,h2,h3,h4,h5 {
+    color: black;
 }
