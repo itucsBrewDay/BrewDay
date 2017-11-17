@@ -30,19 +30,90 @@ class Database:
         with dbapi2.connect(self.config) as connection:
             cursor = connection.cursor()
 
-
             query = """DROP TABLE IF EXISTS UserInfo CASCADE"""
             cursor.execute(query)
             query = """CREATE TABLE UserInfo (
-                                      UserID SERIAL PRIMARY KEY,
-                                      Username varchar(100) UNIQUE NOT NULL,
-                                      Password varchar(100) NOT NULL,
-                                      LastLoginDate TIMESTAMP
-                            
-                                    )"""
+                                                              UserID SERIAL PRIMARY KEY,
+                                                              Mail varchar(100)  NOT NULL,
+                                                              Name varchar(100)  NOT NULL,
+                                                              Surname varchar(100)  NOT NULL,
+                                                              UserName varchar(100)  NOT NULL,
+                                                              Password varchar(100)  NOT NULL,
+                                                              Date timestamp NOT NULL,
+                                                              LastLoginDate timestamp NOT NULL,
+                                                              CreateDate timestamp  NOT NULL
+                                                            )"""
             cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS TypeParameter CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE TypeParameter (
+                                                              ID SERIAL PRIMARY KEY,
+                                                              Name varchar(100)  NOT NULL
+                                                            )"""
+            cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS EquipmentInfo CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE EquipmentInfo (
+                                                             ID SERIAL PRIMARY KEY,
+                                                             UserID int  NOT NULL,
+                                                             TypeID int  NOT NULL,
+                                                             Size decimal(7,2)  NOT NULL,
+                                                             CreateDate timestamp  NOT NULL,
+                                                             FOREIGN KEY (TypeID) REFERENCES TypeParameter(ID),
+                                                             FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
+                            )"""
+            cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS RecipeInfo CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE RecipeInfo (
+                                                  RecipeID SERIAL PRIMARY KEY,
+                                                  UserID int  NOT NULL,
+                                                  CreateDate timestamp  NOT NULL,
+                                                  FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
+
+                                                )"""
+            cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS IngredientParameter CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE IngredientParameter (
+                                                  ID SERIAL PRIMARY KEY,
+                                                  Name varchar(100)  NOT NULL
+                                                )"""
+            cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS RecipeMap CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE RecipeMap (
+                                                  ID SERIAL PRIMARY KEY,
+                                                  RecipeID int  NOT NULL,
+                                                  IngredientID int  NOT NULL,
+                                                  Amount decimal(7,2)  NOT NULL,
+                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID),
+                                                  FOREIGN KEY (IngredientID) REFERENCES IngredientParameter(ID)
+
+                                                )"""
+            cursor.execute(query)
+
+            query = """DROP TABLE IF EXISTS RateCommentInfo CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE RateCommentInfo (
+                                                  ID SERIAL PRIMARY KEY,
+                                                  RecipeID int  NOT NULL,
+                                                  Rate int  NOT NULL,
+                                                  Comment varchar(500)  NOT NULL,
+                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID)
+
+                                                )"""
+            cursor.execute(query)
+
+
 
             connection.commit()
             cursor.close()
+
 
 database = Database()
