@@ -1,6 +1,6 @@
 applications:
 - services:
-  - ElephantSQL-ps
+  - ElephantSQL-8h
   disk_quota: 1024M
   host: BrewDay
   name: BrewDay
