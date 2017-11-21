@@ -54,3 +54,10 @@ def register_page():
     else:
         UserLogin.add_user(request.form['username'], request.form['password'])
         return redirect(url_for('site.home_page'))
+
+@site.route('/search_recipe', methods=['GET', 'POST'])
+def search_recipe():
+    if request.method == 'GET':
+        return render_template('search_recipe.html')
+    else:
+        pass # pass for now, will be implemented later
