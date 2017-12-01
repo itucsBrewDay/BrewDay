@@ -21,10 +21,9 @@ def initialize_database():
     return redirect(url_for('site.home_page'))
 
 @site.route('/')
-@login_required
 def home_page():
     now = datetime.datetime.now()
-    print("Current user: ",current_user.username)
+    print("Current user: ",current_user.is_authenticated)
     return render_template('home.html', current_time=now.ctime())
 
 @site.route('/logout')
@@ -56,6 +55,7 @@ def register_page():
         return redirect(url_for('site.home_page'))
 
 @site.route('/search_recipe', methods=['GET', 'POST'])
+@login_required
 def search_recipe():
     if request.method == 'GET':
         return render_template('search_recipe.html')

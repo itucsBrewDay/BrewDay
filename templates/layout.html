@@ -40,9 +40,11 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Services</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/search_recipe">Search Recipe</a>
-            </li>
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/search_recipe">Search Recipe</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="/login">Login</a>
             </li>
