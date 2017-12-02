@@ -37,7 +37,7 @@ def home_page():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('site.login_page'))
+    return redirect(url_for('site.home_page'))
 
 @site.route('/login', methods=['GET', 'POST'])
 def login_page():
