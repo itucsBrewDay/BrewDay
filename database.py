@@ -72,11 +72,11 @@ class Database:
                                                     RecipeID SERIAL PRIMARY KEY,
                                                     UserID int  NOT NULL,
                                                     CreateDate timestamp  NOT NULL,
-                                                    FOREIGN KEY (UserID) REFERENCES UserInfo(UserID),
                                                     Name varchar(100)  NOT NULL,
                                                     Description varchar(200)  NOT NULL,
                                                     Procedure varchar(200)  NOT NULL,
-                                                    Clickcount int  NOT NULL
+                                                    Clickcount int  NOT NULL,
+                                                    FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
                                                 )"""
             cursor.execute(query)
 

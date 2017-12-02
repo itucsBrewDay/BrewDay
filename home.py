@@ -26,9 +26,9 @@ def initialize_database():
 
 @site.route('/')
 def home_page():
-    now = datetime.datetime.now()
+    recipes = Recipe.getall()
     print("Current user: ",current_user.is_authenticated)
-    return render_template('home.html', current_time=now.ctime())
+    return render_template('home.html', recipes=recipes)
 
 @site.route('/logout')
 @login_required
