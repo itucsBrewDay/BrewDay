@@ -69,11 +69,14 @@ class Database:
             query = """DROP TABLE IF EXISTS RecipeInfo CASCADE"""
             cursor.execute(query)
             query = """CREATE TABLE RecipeInfo (
-                                                  RecipeID SERIAL PRIMARY KEY,
-                                                  UserID int  NOT NULL,
-                                                  CreateDate timestamp  NOT NULL,
-                                                  FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
-
+                                                    RecipeID SERIAL PRIMARY KEY,
+                                                    UserID int  NOT NULL,
+                                                    CreateDate timestamp  NOT NULL,
+                                                    FOREIGN KEY (UserID) REFERENCES UserInfo(UserID),
+                                                    Name varchar(100)  NOT NULL,
+                                                    Description varchar(200)  NOT NULL,
+                                                    Procedure varchar(200)  NOT NULL,
+                                                    Clickcount int  NOT NULL
                                                 )"""
             cursor.execute(query)
 
