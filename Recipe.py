@@ -1,4 +1,4 @@
-4import psycopg2 as dbapi2
+import psycopg2 as dbapi2
 from database import database
 import datetime
 from user import *
