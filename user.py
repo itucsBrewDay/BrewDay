@@ -53,7 +53,7 @@ class UserLogin:
             if user_data:
                 return User(id=user_data[0],  username=user_data[4], password=user_data[5],  lastLoginDate = user_data[7])
             else:
-                return -1
+                return None
 
     @classmethod
     def select_user_with_id(cls, user_id):
