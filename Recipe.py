@@ -12,6 +12,7 @@ class Recipe:
         self.procedure = procedure
         self.clickCount = clickCount
 
+    @classmethod
     def add(self, user, name, desc, procedure):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
@@ -27,6 +28,7 @@ class Recipe:
 
             cursor.close()
 
+    @classmethod
     def getall(self):
         recipes = []
         with dbapi2.connect(database.config) as connection:
