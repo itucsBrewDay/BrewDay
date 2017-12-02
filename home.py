@@ -21,6 +21,9 @@ def initialize_database():
     Recipe.add(UserLogin.select_user("admin"), "Recipe1", "Descripion for Recipe1", "Procedure of Recipe1")
     Recipe.add(UserLogin.select_user("admin"), "Recipe2", "Descripion for Recipe2", "Procedure of Recipe2")
     Recipe.add(UserLogin.select_user("admin"), "Recipe3", "Descripion for Recipe3", "Procedure of Recipe3")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe4", "Descripion for Recipe4", "Procedure of Recipe4")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe5", "Descripion for Recipe5", "Procedure of Recipe5")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe6", "Descripion for Recipe6", "Procedure of Recipe6")
 
     return redirect(url_for('site.home_page'))
 
