@@ -4,6 +4,35 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-3-col-portfolio/blob/master/LICENSE)
  */
 
+.social:hover {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+}
+.social {
+    -webkit-transform: scale(0.9);
+    /* Browser Variations: */
+
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+}
+
+#social-fb:hover {
+    color: #3B5998;
+}
+#social-tw:hover {
+    color: #4099FF;
+}
+#social-gp:hover {
+    color: #d34836;
+}
+#social-em:hover {
+    color: #f39c12;
+}
+
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
@@ -19,15 +48,19 @@
 }
 
 h1,h2,h3,h4,h5 {
-    color: black;
+    color: #d9d6f9;
+}
+
+a {
+    color: #847dce;
 }
 
 body, html{
-     height: 100%;
- 	background-repeat: no-repeat;
- 	background-color: #d3d3d3;
- 	font-family: 'Oxygen', sans-serif;
-  padding-top: 54px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-color: #101010;
+    font-family: 'Oxygen', sans-serif;
+    padding-top: 34px;
 }
 
 .main{
