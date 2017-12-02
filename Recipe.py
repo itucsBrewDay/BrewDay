@@ -38,7 +38,7 @@ class Recipe:
             try:
                 cursor.execute(query)
                 for r in cursor:
-                    recipes.append(Recipe(r[0], User.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
+                    recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
             except dbapi2.Error:
                 connection.rollback()
             else:
