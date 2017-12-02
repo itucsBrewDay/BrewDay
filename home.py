@@ -10,6 +10,7 @@ from flask import url_for
 from flask_login import login_user, current_user, login_required, logout_user
 
 from user import UserLogin
+from Recipe import Recipe
 site = Blueprint('site',__name__)
 
 @site.route('/initdb')
@@ -17,6 +18,9 @@ def initialize_database():
 
     database.create_tables()
     UserLogin.add_user("admin", "12345")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe1", "Descripion for Recipe1", "Procedure of Recipe1")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe2", "Descripion for Recipe2", "Procedure of Recipe2")
+    Recipe.add(UserLogin.select_user("admin"), "Recipe3", "Descripion for Recipe3", "Procedure of Recipe3")
 
     return redirect(url_for('site.home_page'))
 
