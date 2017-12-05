@@ -17,7 +17,7 @@ site = Blueprint('site',__name__)
 def initialize_database():
 
     database.create_tables()
-    UserLogin.add_user("admin", "12345")
+    UserLogin.init_admin()
     Recipe.add(UserLogin.select_user("admin"), "Recipe1", "Descripion for Recipe1", "Procedure of Recipe1")
     Recipe.add(UserLogin.select_user("admin"), "Recipe2", "Descripion for Recipe2", "Procedure of Recipe2")
     Recipe.add(UserLogin.select_user("admin"), "Recipe3", "Descripion for Recipe3", "Procedure of Recipe3")
@@ -31,17 +31,20 @@ def initialize_database():
 def home_page():
     recipes = Recipe.getall()
     print("Current user: ",current_user.is_authenticated)
+
     return render_template('home.html', recipes=recipes)
 
 @site.route('/logout')
 @login_required
 def logout():
+    print("Logout user:", current_user.username)
     logout_user()
     return redirect(url_for('site.home_page'))
 
 @site.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'GET':
+
         return render_template('login.html')
     else:
         user = UserLogin.select_user(request.form['username'])
@@ -58,12 +61,24 @@ def register_page():
     if request.method == 'GET':
         return render_template('register.html')
     else:
-        UserLogin.add_user(request.form['username'], request.form['password'])
-        return redirect(url_for('site.home_page'))
+        print("register add")
+        name = request.form['name']
+        surname =  request.form['surname']
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        confirm = request.form['confirm']
+        if password == confirm:
+            UserLogin.add_user(name, surname, email, username , password)
+        else:
+            pass  # will be implemented later
+
+        return redirect(url_for('site.login_page'))
 
 @site.route('/search_recipe', methods=['GET', 'POST'])
 @login_required
 def search_recipe():
+    print("Current user:", current_user.username)
     if request.method == 'GET':
         return render_template('search_recipe.html')
     else:

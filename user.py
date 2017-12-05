@@ -12,17 +12,32 @@ class User(UserMixin):
         self.lastLoginDate = lastLoginDate
 
 class UserLogin:
+
     @classmethod
-    def add_user(cls, username, password):
+    def init_admin(self):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO UserInfo ( Mail, Name, Surname, UserName, Password, Date, LastLoginDate, CreateDate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
+            LastLoginDate = datetime.datetime.now()
+            password = '12345'
             hashp = pwd_context.encrypt(password)
-            var1=   "Utku@mail"
-            var2=   "Utku Anıl"
-            var3=   "Saykara"
+            ### initialize the admin user in UserInfo table. ###
+            query = """INSERT INTO UserInfo(Mail,name,surname,username,password,date,LastLoginDate,CreateDate) VALUES ('admin@brewday.com','admin','admin','admin','%s','5.12.2017', '%s', '5.12.2017')""" % (hashp,LastLoginDate)
+            cursor.execute(query)
+
+        ##############################################################
+            connection.commit()
+            cursor.close()
+
+    @classmethod
+    def add_user(cls, name, surname, email, username, password):
+        with dbapi2.connect(database.config) as connection:
+
+            cursor = connection.cursor()
+            hashp = pwd_context.encrypt(password)
+            query = "INSERT INTO UserInfo( Mail, Name, Surname, UserName, Password, Date, LastLoginDate, CreateDate) VALUES('%s','%s','%s','%s','%s','%s','%s','%s')" % (email, name, surname, username, hashp,datetime.datetime.now(),datetime.datetime.now(), datetime.datetime.now())
+
             try:
-                cursor.execute(query, ( var1, var2, var3, username, hashp, datetime.datetime.now(), datetime.datetime.now(), datetime.datetime.now(),))
+                cursor.execute(query)
 
             except dbapi2.Error:
                 connection.rollback()
@@ -36,13 +51,14 @@ class UserLogin:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT * FROM UserInfo WHERE Username=%s"""
+            query = """SELECT * FROM UserInfo WHERE username='%s' """ % username
 
             user_data = None
 
             try:
-                cursor.execute(query, (username,))
+                cursor.execute(query)
                 user_data = cursor.fetchone()
+
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -60,10 +76,10 @@ class UserLogin:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT * FROM UserInfo WHERE UserID=%s"""
+            query = """SELECT * FROM UserInfo WHERE UserID='%s'""" % user_id
 
             try:
-                cursor.execute(query, (user_id,))
+                cursor.execute(query)
                 user_data = cursor.fetchone()
             except dbapi2.Error:
                 connection.rollback()
@@ -73,7 +89,7 @@ class UserLogin:
             cursor.close()
 
             if user_data:
-                return User(id=user_data[0], username=user_data[1], password=user_data[2], lastLoginDate = user_data[3])
+                return User(id=user_data[0], username=user_data[4], password=user_data[5], lastLoginDate = user_data[7])
             else:
                 return -1
 

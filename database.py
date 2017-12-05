@@ -40,7 +40,7 @@ class Database:
                                                               UserName varchar(100)  NOT NULL,
                                                               Password varchar(500)  NOT NULL,
                                                               Date timestamp NOT NULL,
-                                                              LastLoginDate timestamp NOT NULL,
+                                                              LastLoginDate timestamp,
                                                               CreateDate timestamp  NOT NULL
                                                             )"""
             cursor.execute(query)
@@ -113,10 +113,10 @@ class Database:
                                                 )"""
             cursor.execute(query)
 
-
-
             connection.commit()
             cursor.close()
+
+
 
 
 database = Database()
