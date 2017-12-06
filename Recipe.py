@@ -3,46 +3,67 @@ from database import database
 import datetime
 from user import *
 
+
 class Recipe:
-    def __init__(self, id, user, name, desc, procedure, clickCount):
-        self.id = id
-        self.user = user
-        self.name = name
-        self.desc = desc
-        self.procedure = procedure
-        self.clickCount = clickCount
+	def __init__(cls, id, user, name, desc, procedure, clickCount):
+		cls.id = id
+		cls.user = user
+		cls.name = name
+		cls.desc = desc
+		cls.procedure = procedure
+		cls.clickCount = clickCount
 
-    @classmethod
-    def add(self, user, name, desc, procedure):
-        with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
-            query = """INSERT INTO RecipeInfo ( userid, Name, description, procedure, clickcount, CreateDate) VALUES (%s,%s,%s,%s,%s,%s)"""
+	@classmethod
+	def add(cls, user, name, desc, procedure):
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """INSERT INTO RecipeInfo ( userid, Name, description, procedure, clickcount, CreateDate) VALUES (%s,%s,%s,%s,%s,%s)"""
 
-            try:
-                cursor.execute(query, (user.id, name, desc, procedure, 0, datetime.datetime.now()))
+			try:
+				cursor.execute(query, (user.id, name, desc, procedure, 0, datetime.datetime.now()))
+			except dbapi2.Error as err:
+				print("Recipe Add Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
 
-            except dbapi2.Error:
-                connection.rollback()
-            else:
-                connection.commit()
+			cursor.close()
 
-            cursor.close()
+	@classmethod
+	def getall(cls):
+		recipes = []
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """SELECT * FROM RecipeInfo"""
 
-    @classmethod
-    def getall(self):
-        recipes = []
-        with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
-            query = """SELECT * FROM RecipeInfo"""
+			try:
+				cursor.execute(query)
+				for r in cursor:
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
+			except dbapi2.Error:
+				connection.rollback()
+			else:
+				connection.commit()
 
-            try:
-                cursor.execute(query)
-                for r in cursor:
-                    recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
-            except dbapi2.Error:
-                connection.rollback()
-            else:
-                connection.commit()
+			cursor.close()
+		return recipes
 
-            cursor.close()
-        return recipes
+	@classmethod
+	def get_like(cls, like):
+		recipes = []
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """SELECT * FROM RecipeInfo where name like '%s%%'""" % like
+
+			try:
+				cursor.execute(query)
+				for r in cursor:
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
+			except dbapi2.Error as err:
+				print("Recipe get_like Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
+		return recipes

@@ -11,23 +11,24 @@
     <hr/>
     <br/>
 
-      <div class="row">
-      {% for recipe in recipes %}
+    <div class="row">
+        {% for recipe in recipes %}
         <div class="col-lg-4 col-sm-6 recipe-item">
-          <div class="card h-100">
+            <div class="card h-100">
             <!-- <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a> -->
             <div class="card-body">
                 <h4 class="card-title">
                     <a href="#">{{ recipe.name }}</a>
                 </h4>
-              <p class="card-text">{{ recipe.desc }}</p>
+            <p class="card-text">{{ recipe.desc }}</p>
             </div>
-          </div>
+            </div>
         </div>
-      {% endfor %}
-      </div>
+        {% endfor %}
+    </div>
 
       <!-- Pagination -->
+    <div class="text-center">
       <ul class="pagination justify-content-center">
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Previous">
@@ -51,7 +52,7 @@
           </a>
         </li>
       </ul>
-
+    </div>
     </div>
     <!-- /.container -->
 

@@ -15,71 +15,67 @@ site = Blueprint('site',__name__)
 
 @site.route('/initdb')
 def initialize_database():
+	loremipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et rutrum sem, nec scelerisque ex. Ut mollis, quam vitae eleifend ornare, sapien est semper magna, sed fermentum diam neque ac est. Praesent at cursus lorem. Ut metus leo, laoreet non bibendum in, efficitur nec nisi. Cras lobortis ut quam nec volutpat. Fusce massa lectus, varius eget magna eget, egestas lacinia sapien. Morbi eget tellus orci. Nullam egestas velit urna, eget porta dui vehicula nec. Integer aliquet, neque et viverra sagittis, turpis lorem facilisis nisl, vitae consectetur magna erat at orci. Praesent fermentum justo erat. Duis tincidunt, eros nec ullamcorper molestie, odio magna viverra urna, quis tincidunt tortor nisl id nisl. Sed ut erat sit amet quam ultrices posuere.'
+	database.create_tables()
+	UserLogin.init_admin()
+	for r in range(1, 19):
+		Recipe.add(UserLogin.select_user("admin"), "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
 
-    database.create_tables()
-    UserLogin.init_admin()
-    Recipe.add(UserLogin.select_user("admin"), "Recipe1", "Descripion for Recipe1", "Procedure of Recipe1")
-    Recipe.add(UserLogin.select_user("admin"), "Recipe2", "Descripion for Recipe2", "Procedure of Recipe2")
-    Recipe.add(UserLogin.select_user("admin"), "Recipe3", "Descripion for Recipe3", "Procedure of Recipe3")
-    Recipe.add(UserLogin.select_user("admin"), "Recipe4", "Descripion for Recipe4", "Procedure of Recipe4")
-    Recipe.add(UserLogin.select_user("admin"), "Recipe5", "Descripion for Recipe5", "Procedure of Recipe5")
-    Recipe.add(UserLogin.select_user("admin"), "Recipe6", "Descripion for Recipe6", "Procedure of Recipe6")
-
-    return redirect(url_for('site.home_page'))
+	return redirect(url_for('site.home_page'))
 
 @site.route('/')
 def home_page():
-    recipes = Recipe.getall()
-    print("Current user: ",current_user.is_authenticated)
+	recipes = Recipe.getall()
+	print("Current user: ",current_user.is_authenticated)
 
-    return render_template('home.html', recipes=recipes)
+	return render_template('home.html', recipes=recipes)
 
 @site.route('/logout')
 @login_required
 def logout():
-    print("Logout user:", current_user.username)
-    logout_user()
-    return redirect(url_for('site.home_page'))
+	print("Logout user:", current_user.username)
+	logout_user()
+	return redirect(url_for('site.home_page'))
 
 @site.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if request.method == 'GET':
+	if request.method == 'GET':
 
-        return render_template('login.html')
-    else:
-        user = UserLogin.select_user(request.form['username'])
-        if user and user != -1:
-            if pwd_context.verify(request.form['password'], user.password):
-                UserLogin.setLastLoginDate(user)
-                login_user(user)
-                print("Current user:",current_user.username)
-                return redirect(url_for('site.home_page'))
+		return render_template('login.html')
+	else:
+		user = UserLogin.select_user(request.form['username'])
+		if user and user != -1:
+			if pwd_context.verify(request.form['password'], user.password):
+				UserLogin.setLastLoginDate(user)
+				login_user(user)
+				print("Current user:",current_user.username)
+				return redirect(url_for('site.home_page'))
 
 
 @site.route('/register', methods=['GET', 'POST'])
 def register_page():
-    if request.method == 'GET':
-        return render_template('register.html')
-    else:
-        print("register add")
-        name = request.form['name']
-        surname =  request.form['surname']
-        email = request.form['email']
-        username = request.form['username']
-        password = request.form['password']
-        confirm = request.form['confirm']
-        if password == confirm:
-            UserLogin.add_user(name, surname, email, username , password)
-        else:
-            pass  # will be implemented later
+	if request.method == 'GET':
+		return render_template('register.html')
+	else:
+		print("register add")
+		name = request.form['name']
+		surname =  request.form['surname']
+		email = request.form['email']
+		username = request.form['username']
+		password = request.form['password']
+		confirm = request.form['confirm']
+		if password == confirm:
+			UserLogin.add_user(name, surname, email, username , password)
+		else:
+			pass  # will be implemented later
 
-        return redirect(url_for('site.login_page'))
+		return redirect(url_for('site.login_page'))
 
 @site.route('/search_recipe', methods=['GET', 'POST'])
 @login_required
 def search_recipe():
-    print("Current user:", current_user.username)
-    if request.method == 'GET':
-        return render_template('search_recipe.html')
-    else:
-        pass # pass for now, will be implemented later
+	print("Current user:", current_user.username)
+	if request.method == 'GET':
+		return render_template('search_recipe.html')
+	else:
+		return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']))

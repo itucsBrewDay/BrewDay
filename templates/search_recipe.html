@@ -7,10 +7,33 @@
             <h1 class="page-header">Search Recipe</h1>
         </div>
         <hr class="vertical-shadow"/>
-        <input type="text" class="form-control" id="search">
+        <form class="form-horizontal" method="POST" action="{{ url_for('site.search_recipe') }}">
+            <div class="row">
+                <div class="col-sm-11 search-object">
+                    <input type="text" name="search" class="form-control" id="search" />
+                </div>
+                <div class="col-sm-1 text-center search-object">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="contaioner">
+        {% for recipe in recipes %}
+        <div class="row">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="#">{{ recipe.name }}</a>
+                    </h4>
+                <p class="card-text">{{ recipe.desc }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
-    <!-- radio button eklenecek (orderin and filtering) -->
+    <!-- radio button eklenecek (ordering and filtering) -->
 
 </div>
 
