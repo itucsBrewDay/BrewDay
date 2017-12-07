@@ -89,3 +89,23 @@ def profile_page():
 		userInfo = Profile.get_userInfo(current_user.username)
 		print(userInfo)
 		return render_template('profile.html',userInfo=userInfo)
+
+@site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])
+@login_required
+def profile_edit(userID):
+	print("Current user:", current_user.username)
+	if request.method == 'GET':
+		userInfo = Profile.get_userInfo(current_user.username)
+		print(userInfo)
+		return render_template('profile_edit.html',userInfo=userInfo)
+	else:
+		newUserInfo = []
+		print("Update Profile")
+		newUserInfo.append(request.form['name'])
+		newUserInfo.append(request.form['surname'])
+		newUserInfo.append(request.form['email'])
+		newUserInfo.append(request.form['username'])
+		newUserInfo.append(request.form['password'])
+
+		Profile.update_userInfo(userID,newUserInfo= newUserInfo)
+		return redirect(url_for('site.profile_page'))
