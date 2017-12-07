@@ -101,6 +101,19 @@ class Database:
                                                 )"""
             cursor.execute(query)
 
+            query = """DROP TABLE IF EXISTS IngredientMap CASCADE"""
+            cursor.execute(query)
+            query = """CREATE TABLE IngredientMap (
+                                                              ID SERIAL PRIMARY KEY,
+                                                              UserID int  NOT NULL,
+                                                              IngredientID int  NOT NULL,
+                                                              Amount decimal(7,2)  NOT NULL,
+                                                              FOREIGN KEY (UserID) REFERENCES UserInfo(UserID),
+                                                              FOREIGN KEY (IngredientID) REFERENCES IngredientParameter(ID)
+
+                                                            )"""
+            cursor.execute(query)
+
             query = """DROP TABLE IF EXISTS RateCommentInfo CASCADE"""
             cursor.execute(query)
             query = """CREATE TABLE RateCommentInfo (
