@@ -2,7 +2,7 @@ import psycopg2 as dbapi2
 from database import database
 import datetime
 from user import *
-
+from flask_login import  current_user
 
 class Profile():
     def __init__(cls, id, username, name, surname, email):
@@ -63,4 +63,24 @@ class Profile():
                 cursor.close()
             return True
 
+    @classmethod
+    def whatShouldIBrewToday(self):
 
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            userId = current_user.id
+            query = """SELECT TOP 1 FROM RecipeInfo k, RecipeMap l, UserInfo m, IngredientMap x, RateCommentInfo y
+                        WHERE k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID and m.ID = %s and x.UserID = %s and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
+                        ORDER BY AVG(Rate) DESC"""%userId%userId
+
+            try:
+                cursor.execute(query, (userId,userId))
+
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                recipeInfo = cursor.fetchall()
+                connection.commit()
+
+            cursor.close()
+        return recipeInfo
