@@ -129,7 +129,20 @@ class Database:
             connection.commit()
             cursor.close()
 
+    def init_db(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
 
-
-
+            ### initialize the Parameter Types in ParameterType table. ###
+            query = """INSERT INTO TypeParameter(Name) VALUES ('Boiler')"""
+            cursor.execute(query)
+            query = """INSERT INTO TypeParameter(Name) VALUES ('Mixer')"""
+            cursor.execute(query)
+            query = """INSERT INTO IngredientParameter(Name) VALUES ('Malt')"""
+            cursor.execute(query)
+            query = """INSERT INTO IngredientParameter(Name) VALUES ('Water')"""
+            cursor.execute(query)
+            query = """INSERT INTO IngredientParameter(Name) VALUES ('Sugar')"""
+            cursor.execute(query)
+            ##############################################################
 database = Database()

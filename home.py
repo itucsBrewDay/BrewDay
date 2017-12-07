@@ -18,6 +18,7 @@ site = Blueprint('site',__name__)
 def initialize_database():
 	loremipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et rutrum sem, nec scelerisque ex. Ut mollis, quam vitae eleifend ornare, sapien est semper magna, sed fermentum diam neque ac est. Praesent at cursus lorem. Ut metus leo, laoreet non bibendum in, efficitur nec nisi. Cras lobortis ut quam nec volutpat. Fusce massa lectus, varius eget magna eget, egestas lacinia sapien. Morbi eget tellus orci. Nullam egestas velit urna, eget porta dui vehicula nec. Integer aliquet, neque et viverra sagittis, turpis lorem facilisis nisl, vitae consectetur magna erat at orci. Praesent fermentum justo erat. Duis tincidunt, eros nec ullamcorper molestie, odio magna viverra urna, quis tincidunt tortor nisl id nisl. Sed ut erat sit amet quam ultrices posuere.'
 	database.create_tables()
+	database.init_db()
 	UserLogin.init_admin()
 	for r in range(1, 19):
 		Recipe.add(UserLogin.select_user("admin"), "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
