@@ -85,11 +85,14 @@ def search_recipe():
 @site.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile_page():
-	print("Current user:", current_user.username)
-	if request.method == 'GET':
-		userInfo = Profile.get_userInfo(current_user.username)
-		print(userInfo)
-		return render_template('profile.html',userInfo=userInfo)
+    if request.method == 'GET':
+        userInfo = Profile.get_userInfo(current_user.username)
+        print(userInfo)
+        return render_template('profile.html', userInfo=userInfo)
+    else:
+        print("heyy")
+        return render_template('profile_add.html')
+
 
 @site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])
 @login_required
@@ -110,3 +113,38 @@ def profile_edit(userID):
 
 		Profile.update_userInfo(userID,newUserInfo= newUserInfo)
 		return redirect(url_for('site.profile_page'))
+
+@site.route('/profile/add', methods=['GET', 'POST'])
+@login_required
+def profile_recipe_add():
+    with dbapi2.connect(database.config) as connection:
+        cursor = connection.cursor()
+
+    if request.method == 'GET':
+        return render_template('profile_add.html')
+        #query = """ SELECT ID,NAME FROM PARAMETERTYPE WHERE ID='%d'"""% TYPE
+        #cursor.execute(query)
+        #typeName = cursor.fetchone()
+
+
+        #return render_template('parameter_add.html', user=current_user.username, parameterType=typeName)
+    else:
+        #parameterName = request.form['parameterType']
+
+        #query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE, parameterName)
+        #cursor.execute(query)
+
+        #connection.commit()
+
+        return redirect(url_for('site.profile_page'))
+
+
+        #parameterName = request.form['parameterType']
+#
+#
+        #query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE,parameterName)
+        #cursor.execute(query)
+#
+        #connection.commit()
+#
+        #return redirect(url_for('site.parameters_page'))

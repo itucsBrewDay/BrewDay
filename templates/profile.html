@@ -1,46 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container">
-    <div class="col-sm-3 col-sm-3" id="profile_img">
-        <img src="http://offprint.in/assets/default-user-avatar-b0e5f9bf40183b2e4d177374e51fb61461eb3f6d7abe0d575403749fae74daf8.jpg"
-             alt="Profil" style=" width:50%" class="img-circle img-responsive">
-        <blockquote>
-            <h2>{{ userInfo[0][0] }} {{ userInfo[0][1] }}</h2>
-            <small>Mail: {{ userInfo[0][2] }}
-                <br/>
-                <i class="glyphicon glyphicon-gift"></i> Creation Date:{{ userInfo[0][3] }} <br/>
-                <i class="glyphicon glyphicon-globe"></i> Last Login Date {{ userInfo[0][4] }}<br/>
+    <div class="container">
+        <div class="col-sm-3 col-sm-3" id="profile_img">
+            <img src="http://offprint.in/assets/default-user-avatar-b0e5f9bf40183b2e4d177374e51fb61461eb3f6d7abe0d575403749fae74daf8.jpg"
+                 alt="Profil" style=" width:50%" class="img-circle img-responsive">
+            <blockquote>
+                <h2>{{ userInfo[0][0] }} {{ userInfo[0][1] }}</h2>
+                <small>Mail: {{ userInfo[0][2] }}
+                    <br/>
+                    <i class="glyphicon glyphicon-gift"></i> Creation Date:{{ userInfo[0][3] }} <br/>
+                    <i class="glyphicon glyphicon-globe"></i> Last Login Date {{ userInfo[0][4] }}<br/>
 
-            </small>
-            <a href="/profile/edit/0" class="btn btn-default btn-xs pull-right" role="button"><i
-                    class="glyphicon glyphicon-edit"></i>Edit Profile</a>
+                </small>
+                <a href="/profile/edit/0" class="btn btn-default btn-xs pull-right" role="button"><i
+                        class="glyphicon glyphicon-edit"></i>Edit Profile</a>
 
-        </blockquote>
+            </blockquote>
 
 
-    </div>
-
-    <div class="col-md-8 col-md-8" id="profile_recipe">
-        <h2>Recipes</h2>
-
-        <div class="card text-white bg-primary mb-3" style="max-width: 40rem;">
-            <div class="card-header">Header</div>
-            <div class="card-body">
-                <h4 class="card-title">Recipe 1</h4>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i
-                        class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs"
-                                                                     role="button">Add</a> <a href="#"
-                                                                                                 class="btn btn-default btn-xs"
-                                                                                                 role="button">Delete</a>
-            </div>
         </div>
 
+        <div class="col-md-8 col-md-8" id="profile_recipe">
+
+            <h2>My Recipes
+                <a href="/profile/add" class="btn btn-info btn-md"><i
+                        class="glyphicon glyphicon-plus" ></i>
+                </a>
+            </h2>
+            {% for recipe in recipes %}
+            <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
+                <div class="card-header" style="color:orangered">Recipe 1</div>
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text" style="color:black">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+
+                    <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
+                            class="glyphicon glyphicon-edit"></i>Edit</a>
+                    <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
     </div>
-</div>
-<!-- /.container -->
+    <!-- /.container -->
 
 
 {% endblock %}
