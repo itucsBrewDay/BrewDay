@@ -3,7 +3,7 @@ from database import database
 from flask_login import current_user
 
 
-class Ingredient:
+class IngredientParameter:
     def __init__(self, id, name):
         self.ID = id
         self.name = name
@@ -35,7 +35,7 @@ class IngredientDatabase:
             cursor.close()
 
             if ingredientInfo:
-                return Ingredient(ID=ingredientInfo[0], name=ingredientInfo[1],)
+                return IngredientParameter(ID=ingredientInfo[0], name=ingredientInfo[1],)
             else:
                 return -1
 
