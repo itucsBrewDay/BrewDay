@@ -11,6 +11,7 @@ from flask_login import login_user, current_user, login_required, logout_user
 
 from user import UserLogin
 from Recipe import Recipe
+from Profile import Profile
 site = Blueprint('site',__name__)
 
 @site.route('/initdb')
@@ -79,3 +80,12 @@ def search_recipe():
 		return render_template('search_recipe.html')
 	else:
 		return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']))
+
+@site.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile_page():
+	print("Current user:", current_user.username)
+	if request.method == 'GET':
+		userInfo = Profile.get_userInfo(current_user.username)
+		print(userInfo)
+		return render_template('profile.html',userInfo=userInfo)

@@ -1,69 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>Brew Day</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <!-- Bootstrap core CSS
-            <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        -->
-        <!-- Custom styles for this template -->
-        <link href="../static/style.css" rel="stylesheet">
-    </head>
-    <body>
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">BrewDay</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        {% if current_user.is_authenticated %}
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="/search_recipe">Search Recipe</a></li>
-                        {% endif %}
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if not current_user.is_authenticated %}
-                            <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                            <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                        {% else %}
-                            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Brew Day</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-            {% block content %}
-            {% endblock %}
-
-        <!-- Footer -->
-        <div class="container">
-            <hr/>
-            <div class="text-center center-block">
-                <a href="https://www.facebook.com/bootsnipp"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
-                <a href="https://twitter.com/bootsnipp"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
-                <a href="https://plus.google.com/+Bootsnipp-page"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
-                <a href="mailto:bootsnipp@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-                <p style="color: white;">Copyright &copy; BrewDay 2017</p>
-            </div>
-            <hr/>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap core CSS
+        <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    -->
+    <!-- Custom styles for this template -->
+    <link href="../static/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">BrewDay</a>
         </div>
-    </body>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+
+                {% if current_user.is_authenticated %}
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/search_recipe">Search Recipe</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if not current_user.is_authenticated %}
+                    <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% else %}
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<!-- Footer -->
+<div class="container">
+    <hr/>
+    <div class="text-center center-block">
+        <a href="https://www.facebook.com/bootsnipp"><i id="social-fb"
+                                                        class="fa fa-facebook-square fa-3x social"></i></a>
+        <a href="https://twitter.com/bootsnipp"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
+        <a href="https://plus.google.com/+Bootsnipp-page"><i id="social-gp"
+                                                             class="fa fa-google-plus-square fa-3x social"></i></a>
+        <a href="mailto:bootsnipp@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+        <p style="color: white;">Copyright &copy; BrewDay 2017</p>
+    </div>
+    <hr/>
+</div>
+</body>
 </html>
