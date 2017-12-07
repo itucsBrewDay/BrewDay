@@ -11,7 +11,7 @@ class Ingredient:
 
 class IngredientDatabase:
     @classmethod
-    def addIngredient(cls, name):
+    def addIngredientParameter(cls, name):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO IngredientParameter (name) VALUES (%s)"""
@@ -19,7 +19,7 @@ class IngredientDatabase:
             cursor.close()
 
     @classmethod
-    def getIngredients(cls):
+    def getAllIngredients(cls):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query = """SELECT * FROM IngredientParameter """
@@ -40,7 +40,7 @@ class IngredientDatabase:
                 return -1
 
     @classmethod
-    def deleteIngredientOfUser(cls, id):
+    def deleteIngredientParameter(cls, id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query = """SELECT * FROM IngredientParameter where ID = %s"""
