@@ -51,6 +51,12 @@ def home_page_number(pagenumber):
 def home_page():
     return redirect('/1')
 
+@site.route('/recipe/<int:recipeID>')
+def show_recipe(recipeID):
+        recipe = Recipe.get_recipe(recipeID)
+
+        return render_template('recipe.html', recipes=recipe)
+
 
 @site.route('/logout')
 @login_required
@@ -265,3 +271,4 @@ def profile_equipment_add():
             EquipmentDatabase.equipmentAddOrUpdate(i, equipment[i - 1])
 
         return redirect(url_for('site.profile_page'))
+

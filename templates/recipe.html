@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Page Heading -->
+    <h1 class="page-header"> {% for recipe in recipes %}{{ recipe.name }}{% endfor %} </h1>
+    <hr/>
+    <br/>
+
+    </div>
+<div class="row">
+            <div class="container col-md-4 col-md-4">
+    </div>
+ <div class="container col-md-4 col-md-4" id="">
+            <span style="display:inline-block; width: 140px;"></span>
+         <img src="https://image.flaticon.com/icons/svg/39/39467.svg" height="180" width="170">
+
+        </div>
+</div>
+
+    <div class="row">
+            <div class="container col-md-4 col-md-4">
+    </div>
+        <div class="col-lg-4 col-sm-6 recipe-item">
+            <div class="card h-100">
+            <!-- <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a> -->
+            <div class="card-body">
+                <h5 class="card-title">
+                    Rating <img src="https://img3-secure.targetimg3.com/wcsstore/marketing/com/uimod/299-11222017-01/images/icons/star-rating-off.svg" height="10" width="58">
+                    <br>Clicks: {% for recipe in recipes %}{{ recipe.clickCount }}{% endfor %}
+                </h5>
+                <h4 class="card-title">
+                    Description
+                </h4>
+                <p class="card-text">{% for recipe in recipes %}{{ recipe.desc }}{% endfor %}</p>
+                <h4 class="card-title">
+                    Ingredients
+                </h4>
+                <p class="card-text">--INGREDIENTS--</p>
+                <h4 class="card-title">
+                    Procedure
+                </h4>
+                <p class="card-text">{% for recipe in recipes %}{{ recipe.procedure }}{% endfor %}</p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+
+      <!-- Pagination -->
+
+    </div>
+    <!-- /.container -->
+
+
+{% endblock %}
+
+
