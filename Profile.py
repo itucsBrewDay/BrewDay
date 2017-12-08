@@ -100,21 +100,39 @@ class Profile():
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userId = current_user.id
-
-            query = """SELECT k.RecipeID, m.name, k.description, k.procedure, m.name, l.amount 
-                        FROM RecipeInfo k, RecipeMap l, IngredientParameter m 
-                         WHERE k.RecipeID = l.RecipeID and l.IngredientID = m.ID and k.userID = %s
-                          GROUP BY k.RecipeID"""%userId
+            print(userId)
+            recipeInfo = None
+            query = """SELECT k.RecipeID, k.name, k.description, k.procedure, m.name, l.amount
+                        FROM RecipeInfo as k, RecipeMap as l, IngredientParameter as m 
+                         WHERE k.RecipeID = l.RecipeID  AND l.IngredientID = m.ID and k.userID = %d
+                         """ % (userId)
             try:
-                cursor.execute(query,(userId))
+                cursor.execute(query)
 
             except dbapi2.Error:
-                print("rollback ERROR")
+                print("ROLLBACK ERROR")
                 connection.rollback()
             else:
+
                 print("ERROR")
                 recipeInfo = cursor.fetchall()
                 connection.commit()
-
+            list = [[]for a in range(50)]
+            j = 0
+            k = 0
+            lastID = 0
+            for i in recipeInfo:
+                print(k)
+                if j == 0:
+                    list[0].append(i)
+                    lastID = i[0]
+                    j = 1
+                else:
+                    if i[0] == lastID:
+                        list[k].append(i)
+                    else:
+                        k = k + 1
+                        list[k].append(i)
+                        lastID = i[0]
             cursor.close()
-        return recipeInfo
+        return list

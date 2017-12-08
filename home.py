@@ -13,7 +13,7 @@ from user import UserLogin
 from Recipe import Recipe
 from Profile import Profile
 from ingredient import IngredientDatabase
-from recipeV2 import RecipeDatabase
+from recipeV2 import RecipeDatabase, RecipeMapDatabase
 site = Blueprint('site',__name__)
 
 @site.route('/initdb')
@@ -90,7 +90,9 @@ def profile_page():
     if request.method == 'GET':
         userInfo = Profile.get_userInfo(current_user.username)
         print(userInfo)
-        return render_template('profile.html', userInfo=userInfo)
+        recipes = Profile.getUserRecipe()
+
+        return render_template('profile.html', userInfo=userInfo, recipes = recipes)
     else:
         print("heyy")
         return render_template('profile_recipe_add.html')
@@ -136,14 +138,23 @@ def profile_recipe_add():
         recipeName = request.form['recipeName']
         description = request.form['description']
         procedure = request.form['procedure']
+
+
+        ingredient_list = IngredientDatabase.getAllIngredients()
+        ingredientIdList =[]
+        for k in ingredient_list:
+            ingredientIdList.append(k[0])
+
         ingredient = []
-        for i in range(1,4):
+        for i in ingredientIdList:
             ingredientid = "ingredient{}".format(str(i))
             print(ingredientid)
             ingredient.append(request.form[ingredientid])
 
-        recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure )
 
+        recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure )
+        for i in ingredientIdList:
+            RecipeMapDatabase.addRecipe(recipeID,i,ingredient[i-1])
         #query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE, parameterName)
         #cursor.execute(query)
 
