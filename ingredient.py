@@ -85,11 +85,18 @@ class IngredientDatabase:
 
 class IngredientMapDatabase:
     @classmethod
-    def addIngredient(cls, userID, ingredientID, amount):
+    def ingredientAddOrUpdate(cls, ingredientID, amount):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO IngredientMap (userID,ingredientID,amount) VALUES (%s,%s,%s)"""
-            cursor.execute(query, (userID,ingredientID,amount))
+            userID = current_user.id
+            query = """SELECT COUNT(*) FROM IngredientMap WHERE UserID = %d"""%(userID)
+            count = cursor.execute(query)
+            if count == 0:
+                query = """INSERT INTO IngredientMap (userID,ingredientID,amount) VALUES (%s,%s,%s)"""
+                cursor.execute(query, (userID,ingredientID,amount))
+            else:
+                query = """UPDATE IngredientMap SET Amount = '%s' WHERE UserID = %s and IngredientID = %s""" % (amount, userID, ingredientID)
+                cursor.execute(query)
             connection.commit()
             cursor.close()
 

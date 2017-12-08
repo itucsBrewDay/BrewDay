@@ -113,8 +113,6 @@ class Profile():
                 print("ROLLBACK ERROR")
                 connection.rollback()
             else:
-
-                print("ERROR")
                 recipeInfo = cursor.fetchall()
                 connection.commit()
             list = [[]for a in range(50)]
