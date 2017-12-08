@@ -75,7 +75,7 @@ class Database:
                                                     Name varchar(100)  NOT NULL,
                                                     Description varchar(2000)  NOT NULL,
                                                     Procedure varchar(2000)  NOT NULL,
-                                                    Clickcount int  NOT NULL,
+                                                    Clickcount int  DEFAULT 0,
                                                     FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
                                                 )"""
             cursor.execute(query)

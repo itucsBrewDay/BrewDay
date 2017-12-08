@@ -12,6 +12,8 @@ from flask_login import login_user, current_user, login_required, logout_user
 from user import UserLogin
 from Recipe import Recipe
 from Profile import Profile
+from ingredient import IngredientDatabase
+from recipeV2 import RecipeDatabase
 site = Blueprint('site',__name__)
 
 @site.route('/initdb')
@@ -91,7 +93,7 @@ def profile_page():
         return render_template('profile.html', userInfo=userInfo)
     else:
         print("heyy")
-        return render_template('profile_add.html')
+        return render_template('profile_recipe_add.html')
 
 
 @site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])
@@ -121,7 +123,9 @@ def profile_recipe_add():
         cursor = connection.cursor()
 
     if request.method == 'GET':
-        return render_template('profile_add.html')
+        ingredients = IngredientDatabase.getAllIngredients()
+        print(ingredients)
+        return render_template('profile_recipe_add.html', ingredients=ingredients)
         #query = """ SELECT ID,NAME FROM PARAMETERTYPE WHERE ID='%d'"""% TYPE
         #cursor.execute(query)
         #typeName = cursor.fetchone()
@@ -129,7 +133,16 @@ def profile_recipe_add():
 
         #return render_template('parameter_add.html', user=current_user.username, parameterType=typeName)
     else:
-        #parameterName = request.form['parameterType']
+        recipeName = request.form['recipeName']
+        description = request.form['description']
+        procedure = request.form['procedure']
+        ingredient = []
+        for i in range(1,4):
+            ingredientid = "ingredient{}".format(str(i))
+            print(ingredientid)
+            ingredient.append(request.form[ingredientid])
+
+        recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure )
 
         #query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE, parameterName)
         #cursor.execute(query)

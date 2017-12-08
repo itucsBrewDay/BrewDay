@@ -5,7 +5,7 @@ from flask_login import current_user
 
 class IngredientParameter:
     def __init__(self, id, name):
-        self.ID = id
+        self.id = id
         self.name = name
 
 
@@ -34,7 +34,7 @@ class IngredientDatabase:
 
             try:
                 cursor.execute(query)
-                ingredientInfo = cursor.fetchone()
+                ingredientInfo = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -42,10 +42,9 @@ class IngredientDatabase:
 
             cursor.close()
 
-            if ingredientInfo:
-                return IngredientParameter(ID=ingredientInfo[0], name=ingredientInfo[1],)
-            else:
-                return -1
+
+            return ingredientInfo
+
 
     @classmethod
     def getIngredientName(cls,id):

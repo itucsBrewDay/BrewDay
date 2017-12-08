@@ -5,7 +5,7 @@ import datetime
 from flask_login import current_user
 
 
-class Recipe():
+class ProfileRecipe():
     def __init__(self, userID, createDate, name, description, procedure, clickcount):
         self.userID = userID
         self.createDate = createDate
@@ -21,8 +21,13 @@ class RecipeDatabase:
             cursor = connection.cursor()
             userId = current_user.id
             createDate = datetime.datetime.now()
-            query = """INSERT INTO EquipmentInfo (userId, createDate, name, description,procedure ,clickcount) VALUES (%s, %s, %s, %s, %s , %s)"""
+            query = """INSERT INTO RecipeInfo (userId, createDate, name, description,procedure ,clickcount) VALUES (%s, %s, %s, %s, %s , %s)"""
             cursor.execute(query, (userId, createDate, name, description,procedure ,0,))
-            return cursor.lastrowid
+            query = """SELECT * FROM RecipeInfo ORDER BY CREATEDATE DESC"""
+            cursor.execute(query)
+            lastrow = cursor.fetchone()[0]
+            connection.commit()
             cursor.close()
+            return lastrow
+
 

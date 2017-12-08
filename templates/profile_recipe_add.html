@@ -17,20 +17,29 @@
                 </div>
             </div>
             <div class="form-group">
-                 <label class="col-md-3 control-label" for="exampleFormControlTextarea1">Example textarea</label>
+                 <label class="col-md-3 control-label" for="exampleFormControlTextarea1">Description</label>
                 <div class="col-md-3">
 
-                    <textarea style="resize :none" class="form-control" id="exampleFormControlTextarea1"
+                    <textarea style="resize :none" class="form-control" id="exampleFormControlTextarea1" name="description"
                               rows="3"></textarea>
                 </div>
             </div>
             <div class="form-group">
                  <label class="col-md-3 control-label" for="comment">Procedure</label>
                 <div class="col-md-3">
-                    <textarea class="form-control" style="resize :none"  rows="5" id="exampleFormControlTextarea2"></textarea>
+                    <textarea class="form-control" style="resize :none"  rows="5" id="exampleFormControlTextarea2" name="procedure"></textarea>
                 </div>
             </div>
+            {% for ingredient in ingredients %}
+                <div class="form-group">
+                <label class="col-md-3 control-label" for="TypeID">{{ ingredient[1] }} </label>
+                <div class="col-md-3">
+                    <input id="ingredientID" name="ingredient{{ ingredient[0] }}" placeholder="Amount" class="form-control input-md"
+                           required="" type="text">
 
+                </div>
+            </div>
+            {% endfor %}
             <!-- Button -->
             <div class="form-group">
                 <label class="col-md-3 control-label"></label>
