@@ -79,8 +79,8 @@ class Profile():
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userId = current_user.id
-            query = """SELECT TOP 1 FROM RecipeInfo k, RecipeMap l, UserInfo m, IngredientMap x, RateCommentInfo y
-                        WHERE k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID and m.ID = %s and x.UserID = %s and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
+            query = """SELECT k.name, k.description, k.procedure, z.name, l.amount  FROM RecipeInfo k, RecipeMap l, UserInfo m, IngredientMap x, RateCommentInfo y, IngredientParameter z
+                        WHERE z.ID = l.IngredientID and k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID and m.ID = %s and x.UserID = %s and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
                         ORDER BY AVG(Rate) DESC"""%userId%userId
 
             try:
