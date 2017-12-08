@@ -122,9 +122,8 @@ class Database:
                                                   Rate int  NOT NULL,
                                                   Comment varchar(500)  NOT NULL,
                                                   UserID int  NOT NULL,
-                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID)
+                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID),
                                                   FOREIGN KEY (UserID) REFERENCES UserInfo(UserID)
-
                                                 )"""
             cursor.execute(query)
 

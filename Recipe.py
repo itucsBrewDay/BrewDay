@@ -63,7 +63,7 @@ class Recipe:
 				for r in cursor:
 					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
 			except dbapi2.Error as err:
-				print("Recipe getall function Error:", err)
+				print("Recipe get_recent function Error:", err)
 				connection.rollback()
 			else:
 				connection.commit()
