@@ -13,8 +13,8 @@ class Recipe:
 		cls.procedure = procedure
 		cls.clickCount = clickCount
 
-	@classmethod
-	def add(cls, user, name, desc, procedure):
+	@staticmethod
+	def add(user, name, desc, procedure):
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """INSERT INTO RecipeInfo ( userid, Name, description, procedure, clickcount, CreateDate) VALUES (%s,%s,%s,%s,%s,%s)"""
@@ -29,8 +29,8 @@ class Recipe:
 
 			cursor.close()
 
-	@classmethod
-	def getall(cls, limit = None, offset = None):
+	@staticmethod
+	def getall(limit = None, offset = None):
 		recipes = []
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
@@ -51,8 +51,8 @@ class Recipe:
 			cursor.close()
 		return recipes
 
-	@classmethod
-	def get_like(cls, like):
+	@staticmethod
+	def get_like(like):
 		recipes = []
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
@@ -70,3 +70,19 @@ class Recipe:
 
 			cursor.close()
 		return recipes
+
+	def get_score(self):
+		score = 0
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = "SELECT AVG(Rate) FROM RateCommentInfo WHERE RecipeID = %d" % self.id
+			try:
+				cursor.execute(query)
+				score = cursor.fetchone()[0]
+			except dbapi2.Error:
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
+		return score
