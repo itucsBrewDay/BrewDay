@@ -112,6 +112,8 @@ def profile_page():
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
+        recipe_suggestion = Profile.whatShouldIBrewToday()
+        print(recipe_suggestion)
         return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients,
                                equipments=equipments)
 

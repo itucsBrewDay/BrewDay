@@ -78,13 +78,18 @@ class Profile():
 
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
+            recipeInfo = None
             userId = current_user.id
-            query = """SELECT k.name, k.description, k.procedure, z.name, l.amount  FROM RecipeInfo k, RecipeMap l, UserInfo m, IngredientMap x, RateCommentInfo y, IngredientParameter z
-                        WHERE z.ID = l.IngredientID and k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID and m.ID = %s and x.UserID = %s and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
-                        ORDER BY AVG(Rate) DESC"""%userId%userId
-
+            print("current user id",userId)
+            #query = """SELECT k.name, k.description, k.procedure, z.name, l.amount  FROM RecipeInfo k, RecipeMap l, IngredientMap x, RateCommentInfo y, IngredientParameter z
+            #            WHERE z.ID = l.IngredientID and k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID  and x.UserID = %d and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
+            #            """ %(userId)  #ORDER BY AVG(Rate) DESC and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
+            query = """SELECT z.Name, z.description, z.procedure, k.name, y.amount 
+                                    FROM IngredientMap as x, RecipeMap as y, RecipeInfo as z, IngredientParameter as k
+                                      WHERE k.ID = x.IngredientID and z.ID = y.RecipeID and y.IngredientID = k.ID and x.IngredientID = y.IngredientID and x.UserID = %d 
+                                      """ % (userId)
             try:
-                cursor.execute(query, (userId,userId))
+                cursor.execute(query)
 
             except dbapi2.Error:
                 connection.rollback()
