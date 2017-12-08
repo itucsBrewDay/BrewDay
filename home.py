@@ -37,7 +37,7 @@ def home_page_number(pagenumber):
         pagenumber = 1
     if pagenumber > 3:
         pagenumber = 3
-    recipes = Recipe.getall(6, 6 * (pagenumber - 1))
+    recipes = Recipe.get_recents(6, 6 * (pagenumber - 1))
     for recipe in recipes:
         recipe.desc = recipe.desc[:200]  # anasayfada sadece max 150 kararkter göster
         if recipe.desc[-1] == ' ':
