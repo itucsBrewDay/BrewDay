@@ -134,3 +134,27 @@ class Profile():
                         lastID = i[0]
             cursor.close()
         return list
+
+    @classmethod
+    def deleteRecipe(self, recipeID):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = "DELETE FROM RECIPEMAP WHERE recipeID= '%d'" % (recipeID)
+            try:
+                cursor.execute(query)
+            except dbapi2.Error:
+
+                print("RollBack Error")
+            else:
+                connection.commit()
+            query = "DELETE FROM RECIPEINFO WHERE recipeID= '%d'" % (recipeID)
+
+            try:
+                cursor.execute(query)
+            except dbapi2.Error:
+                print("ROLLBACK ERROR")
+                connection.rollback()
+            else:
+                connection.commit()
+            cursor.close()
+            return

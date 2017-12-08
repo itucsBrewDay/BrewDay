@@ -111,10 +111,17 @@ def profile_page():
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
-        return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients , equipments = equipments)
-    else:
-        print("heyy")
-        return render_template('profile_recipe_add.html')
+        return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, equipments = equipments)
+
+@site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])
+@login_required
+def profile_recipe_delete(recipeID):
+    print("DELETE RECiPE")
+    if request.method == 'POST':
+        print("DELETE recipeid",recipeID)
+        Profile.deleteRecipe(recipeID)
+
+    return redirect(url_for('site.profile_page'))
 
 
 @site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])

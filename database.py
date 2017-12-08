@@ -95,7 +95,7 @@ class Database:
                                                   RecipeID int  NOT NULL,
                                                   IngredientID int  NOT NULL,
                                                   Amount decimal(7,2)  NOT NULL,
-                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID),
+                                                  FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID) ON DELETE CASCADE,
                                                   FOREIGN KEY (IngredientID) REFERENCES IngredientParameter(ID)
 
                                                 )"""

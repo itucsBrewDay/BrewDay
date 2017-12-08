@@ -40,7 +40,12 @@
                             {% endfor %}
                             <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
                                     class="glyphicon glyphicon-edit"></i>Edit</a>
-                            <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>
+                            <!-- <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>-->
+                            <form id="recipeForm" method="POST" action="{{ url_for('site.profile_recipe_delete',recipeID=recipe[1][0])}}">
+
+                                <button type="submit" class="btn btn-info btn-xs">Delete</button>
+                            </form>>
+
                         </div>
                     </div>
 
