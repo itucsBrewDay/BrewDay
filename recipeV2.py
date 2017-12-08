@@ -40,6 +40,8 @@ class RecipeDatabase:
             return lastrow
 
 
+
+
 class RecipeMapDatabase:
     @classmethod
     def addRecipe(cls, recipeID, ingredientID, amount):

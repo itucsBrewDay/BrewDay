@@ -42,8 +42,6 @@ class IngredientDatabase:
                 connection.commit()
 
             cursor.close()
-
-
             return ingredientInfo
 
 

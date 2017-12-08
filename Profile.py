@@ -12,6 +12,16 @@ class Profile():
         cls.surname = surname
         cls.email = email
 
+    class ProfileRecipeInfo():
+        def __init__(cls, id, name, description, procedure, ingredient, amount):
+            cls.id = id
+            cls.name = name
+            cls.description = description
+            cls.procedure = procedure
+            cls.ingredient = ingredient
+            cls.amount = amount
+
+
     @classmethod
     def get_userInfo(cls,username):
         userInfo = None
@@ -79,6 +89,30 @@ class Profile():
             except dbapi2.Error:
                 connection.rollback()
             else:
+                recipeInfo = cursor.fetchall()
+                connection.commit()
+
+            cursor.close()
+        return recipeInfo
+
+    @classmethod
+    def getUserRecipe(self):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            userId = current_user.id
+
+            query = """SELECT k.RecipeID, m.name, k.description, k.procedure, m.name, l.amount 
+                        FROM RecipeInfo k, RecipeMap l, IngredientParameter m 
+                         WHERE k.RecipeID = l.RecipeID and l.IngredientID = m.ID and k.userID = %s
+                          GROUP BY k.RecipeID"""%userId
+            try:
+                cursor.execute(query,(userId))
+
+            except dbapi2.Error:
+                print("rollback ERROR")
+                connection.rollback()
+            else:
+                print("ERROR")
                 recipeInfo = cursor.fetchall()
                 connection.commit()
 
