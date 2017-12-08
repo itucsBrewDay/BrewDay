@@ -98,8 +98,8 @@ def profile_page():
         userInfo = Profile.get_userInfo(current_user.username)
         print(userInfo)
         recipes = Profile.getUserRecipe()
-
-        return render_template('profile.html', userInfo=userInfo, recipes=recipes)
+        ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
+        return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients = ingredients)
     else:
         print("heyy")
         return render_template('profile_recipe_add.html')

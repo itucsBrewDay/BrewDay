@@ -10,10 +10,8 @@ class IngredientParameter:
 
 
 class Ingredient:
-    def __init__(self, id, userId, ingredientId, amount):
-        self.id = id
-        self.userId = userId
-        self.ingredientId = ingredientId
+    def __init__(self, name, amount):
+        self.name = name
         self.amount = amount
 
 
@@ -105,7 +103,7 @@ class IngredientMapDatabase:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userID = current_user.id
-            query = """SELECT * FROM IngredientMap WHERE UserID = %s"""%userID
+            query = """SELECT l.name, k.amount FROM IngredientMap as k, IngredientParameter as l WHERE k.IngredientID = l.ID and k.UserID = %s """%(userID)
 
             try:
                 cursor.execute(query,(userID))
@@ -114,28 +112,5 @@ class IngredientMapDatabase:
                 connection.rollback()
             else:
                 connection.commit()
-
             cursor.close()
-
-            if ingredientInfo:
-                return IngredientParameter(ID=ingredientInfo[0], userId=ingredientInfo[1], ingredientId=ingredientInfo[2], amount=ingredientInfo[3],)
-            else:
-                return -1
-
-    @classmethod
-    def updateIngredientOfUser(cls, newAmount):
-        with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
-            userID = current_user.id
-            try:
-                for i in newAmount:
-                    query = """UPDATE IngredientMap SET Amount = '%s' WHERE UserID = %s and IngredientID = %s""" %(i[1],userID,i[0])
-                    cursor.execute(query)
-
-
-            except dbapi2.Error:
-                connection.rollback()
-            else:
-                connection.commit()
-                cursor.close()
-            return True
+            return ingredientInfo
