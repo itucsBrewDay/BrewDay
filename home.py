@@ -99,7 +99,7 @@ def search_recipe():
     if request.method == 'GET':
         return render_template('search_recipe.html')
     else:
-        return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']))
+        return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']), like=request.form['search'])
 
 
 @site.route('/profile', methods=['GET', 'POST'])

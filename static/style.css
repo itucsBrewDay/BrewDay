@@ -117,6 +117,10 @@ input::-webkit-input-placeholder {
     padding-top: 3px;
 }
 
+.found-count-info {
+    color: #888888;
+}
+
 .main-login{
  	background-color: #fff;
     /* shadows and rounded borders */

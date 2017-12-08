@@ -56,7 +56,7 @@ class Recipe:
 		recipes = []
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
-			query = """SELECT * FROM RecipeInfo where name like '%s%%'""" % like
+			query = """SELECT * FROM RecipeInfo where name like '%s%%' OR description like '%%%s%%'""" % (like, like)
 
 			try:
 				cursor.execute(query)
