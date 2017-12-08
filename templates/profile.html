@@ -22,21 +22,19 @@
         </div>
         <div class="col-md-4 col-md-4" id="profile_suggestion">
             <h2>What should I brew today!</h2>
-            {% for recipe in recipes2 %}
-                {% if recipe[0] != NULL %}
                     <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
-                        <div class="card-header" style="color:orangered">{{ recipe[1][1] }}</div>
+                        <div class="card-header" style="color:orangered">{{ recipe_suggestions[1][0] }}</div>
                         <div class="card-body">
-                            <h4 class="card-title">Description: {{ recipe[1][2] }}</h4>
-                            <p class="card-text" style="color:black">Procedure: {{ recipe[1][3] }}</p>
+                            <h4 class="card-title">Description: {{ recipe_suggestions[1][1] }}</h4>
+                            <p class="card-text" style="color:black">Procedure: {{ recipe_suggestions[1][2] }}</p>
                             <p class="card-text" style="color:black">Ingredient: </p>
-                            {% for i in recipe %}
-                                <p class="card-text" style="color:black">{{ i[4] }} Amount: {{ i[5] }}</p>
-                            {% endfor %}
+                            <p class="card-text" style="color:black">{{ recipe_suggestions[1][3] }} Amount: {{ recipe_suggestions[1][4] }}</p>
+                            <p class="card-text" style="color:black">{{ recipe_suggestions[1][8] }} Amount: {{ recipe_suggestions[1][9] }}</p>
+                            <p class="card-text" style="color:black">{{ recipe_suggestions[1][12] }} Amount: {{ recipe_suggestions[1][14] }}</p>
 
                             <!-- <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>-->
                             <form name="recipeApply" method="POST">
-                                <a href="/profile/apply/{{ recipe[1][0] }}" class="btn btn-default btn-xs pull-right"><i
+                                <a href="/profile/apply/{{ recipe_suggestions[0][0] }}" class="btn btn-default btn-xs pull-right"><i
                                         class="glyphicon glyphicon-ok">Apply</i>
                                 </a>
 
@@ -44,9 +42,6 @@
 
                         </div>
                     </div>
-
-                {% endif %}
-            {% endfor %}
             <br>
 
         </div>

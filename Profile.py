@@ -2,6 +2,7 @@ import psycopg2 as dbapi2
 from database import database
 import datetime
 from user import *
+from itertools import groupby
 from flask_login import  current_user
 
 class Profile():
@@ -78,34 +79,60 @@ class Profile():
 
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            recipeInfo = None
             userId = current_user.id
-            print("current user id",userId)
-            #query = """SELECT k.name, k.description, k.procedure, z.name, l.amount  FROM RecipeInfo k, RecipeMap l, IngredientMap x, RateCommentInfo y, IngredientParameter z
-            #            WHERE z.ID = l.IngredientID and k.RecipeID = l.RecipeID and y.RecipeID = k.RecipeID  and x.UserID = %d and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
-            #            """ %(userId)  #ORDER BY AVG(Rate) DESC and (l.IngredientID = x.IngredientID and x.Amount > l.Amount)
-            query = """SELECT z.Name, z.description, z.procedure, k.name, y.amount 
-                                    FROM IngredientMap as x, RecipeMap as y, RecipeInfo as z, IngredientParameter as k
-                                      WHERE k.ID = x.IngredientID and z.ID = y.RecipeID and y.IngredientID = k.ID and x.IngredientID = y.IngredientID and x.UserID = %d 
-                                      """ % (userId)
+            query = """SELECT COUNT (*) FROM RateCommentInfo """
             try:
                 cursor.execute(query)
 
             except dbapi2.Error:
                 connection.rollback()
-            else:
-                recipeInfo = cursor.fetchall()
-                connection.commit()
 
+            else:
+                count = cursor.fetchone()
+                connection.commit()
+            if count[0] == 0:
+                query = """SELECT k.RecipeID, l.name, l.description, l.procedure, y.name, k.amount  FROM IngredientMap as x, IngredientParameter as y, RecipeMap as k, RecipeInfo as l
+                                  WHERE x.UserID = %d and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount
+                                    
+                                      """ % (userId)
+                try:
+                    cursor.execute(query)
+
+                except dbapi2.Error:
+                    connection.rollback()
+
+                else:
+                    recipeInfo = cursor.fetchall()
+                    connection.commit()
+            else:
+                query = """SELECT k.RecipeID, l.name, l.description, l.procedure, y.name, k.amount  FROM IngredientMap as x, IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
+                                                  WHERE x.UserID = %d and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount and l.RecipeID = a.RecipeID
+                                                    ORDER BY AVG(a.Rate) DESC
+                                                      """ % (userId)
+                try:
+                    cursor.execute(query)
+
+                except dbapi2.Error:
+                    connection.rollback()
+
+                else:
+                    recipeInfo = cursor.fetch()
+                    connection.commit()
             cursor.close()
-        return recipeInfo
+            d = dict()
+            merge = True
+            for recipe in recipeInfo:
+                k = recipe[0]
+                v = d.get(k, tuple()) + (recipe[:0] + recipe[0 + 1:] if merge else (recipe[:0] + recipe[0 + 1:],))
+                d.update({k: v})
+
+        return d
 
     @classmethod
     def getUserRecipe(self):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userId = current_user.id
-            print(userId)
             recipeInfo = None
             query = """SELECT k.RecipeID, k.name, k.description, k.procedure, m.name, l.amount
                         FROM RecipeInfo as k, RecipeMap as l, IngredientParameter as m 
