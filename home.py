@@ -174,7 +174,6 @@ def profile_recipe_add():
         ingredient = []
         for i in ingredientIdList:
             ingredientid = "ingredient{}".format(str(i))
-            print(ingredientid)
             ingredient.append(request.form[ingredientid])
 
         recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure)

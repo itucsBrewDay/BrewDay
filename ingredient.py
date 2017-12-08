@@ -105,7 +105,7 @@ class IngredientMapDatabase:
             cursor = connection.cursor()
             userID = current_user.id
             ingredientInfo = None
-            query = """SELECT l.name, k.amount FROM IngredientMap as k, IngredientParameter as l WHERE k.IngredientID = l.ID and k.UserID = %s """%(userID)
+            query = """SELECT l.name, k.amount, l.ID FROM IngredientMap as k, IngredientParameter as l WHERE k.IngredientID = l.ID and k.UserID = %s """%(userID)
 
             try:
                 cursor.execute(query,(userID))

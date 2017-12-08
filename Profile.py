@@ -158,3 +158,56 @@ class Profile():
                 connection.commit()
             cursor.close()
             return
+
+    @classmethod
+    def recipeApply(self, recipeID):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = """SELECT IngredientID, Amount FROM RecipeMap WHERE RecipeID = %s"""
+            try:
+                cursor.execute(query, (recipeID))
+
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                recipeIngredientInfo = cursor.fetchall()
+                connection.commit()
+
+            userId = current_user.id
+            query = """SELECT IngredientID, Amount FROM IngredientMap WHERE UserID = %s"""
+
+            try:
+                cursor.execute(query, (userId))
+
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                userIngredientInfo = cursor.fetchall()
+                connection.commit()
+
+
+        ctrl = 0
+        for i in recipeIngredientInfo:
+            for j in userIngredientInfo:
+                if i[0] == j[0]:
+                    if i[1] > j[1]:
+                        ctrl = 1
+
+        if ctrl == 1:
+            return "Not enough ingredients"
+        else:
+            for i in recipeIngredientInfo:
+                for j in userIngredientInfo:
+                    if i[0] == j[0]:
+                        query = """UPDATE IngredientMap SET Amount = %s WHERE IngredientID = %s"""
+
+                        try:
+                            cursor.execute(query, (j[1]-i[1],i[0]))
+
+                        except dbapi2.Error:
+                            connection.rollback()
+                        else:
+                            userIngredientInfo = cursor.fetchall()
+                            connection.commit()
+            cursor.close()
+            return "Successful"
