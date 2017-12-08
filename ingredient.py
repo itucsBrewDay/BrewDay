@@ -104,6 +104,7 @@ class IngredientMapDatabase:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userID = current_user.id
+            ingredientInfo = None
             query = """SELECT l.name, k.amount FROM IngredientMap as k, IngredientParameter as l WHERE k.IngredientID = l.ID and k.UserID = %s """%(userID)
 
             try:

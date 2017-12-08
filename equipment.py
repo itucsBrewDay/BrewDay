@@ -36,6 +36,7 @@ class EquipmentDatabase:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userID = current_user.id
+            equipmentInfo = None
             query = """SELECT l.name, k.size FROM EquipmentInfo as k, TypeParameter as l WHERE k.TypeID = l.ID and UserID=%s """%(userID)
             try:
                 cursor.execute(query)

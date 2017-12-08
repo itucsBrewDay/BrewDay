@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <div class="container">
+    <div class="container" id="profile">
         <div class="col-sm-3 col-sm-3" id="profile_img">
             <img src="http://offprint.in/assets/default-user-avatar-b0e5f9bf40183b2e4d177374e51fb61461eb3f6d7abe0d575403749fae74daf8.jpg"
                  alt="Profil" style=" width:50%" class="img-circle img-responsive">
@@ -24,76 +24,71 @@
         <div class="col-md-4 col-md-4" id="profile_recipe">
 
             <h2>My Recipes
-                <a href="/profile/add" class="btn btn-info btn-md"><i
-                        class="glyphicon glyphicon-plus"></i>
-                </a>
             </h2>
             {% for recipe in recipes %}
                 {% if recipe[0] != NULL %}
                     <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
                         <div class="card-header" style="color:orangered">{{ recipe[1][1] }}</div>
                         <div class="card-body">
-                            <h4 class="card-title">{{ recipe[1][2] }}</h4>
-                            <p class="card-text" style="color:black">{{ recipe[1][3] }}</p>
+                            <h4 class="card-title">Description: {{ recipe[1][2] }}</h4>
+                            <p class="card-text" style="color:black">Procedure: {{ recipe[1][3] }}</p>
+                            <p class="card-text" style="color:black">Ingredient: </p>
                             {% for i in recipe %}
-                                <p class="card-text" style="color:black">Ingredient: {{ i[4] }} Amount: {{ i[5] }}</p>
+                                <p class="card-text" style="color:black">{{ i[4] }} Amount: {{ i[5] }}</p>
                             {% endfor %}
-                            <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
-                                    class="glyphicon glyphicon-edit"></i>Edit</a>
+                            <a href="/profile/add" class="btn btn-default btn-xs pull-right" role="button"><i
+                                    class="glyphicon glyphicon-plus"></i>Add</a>
                             <!-- <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>-->
-                            <form id="recipeForm" method="POST" action="{{ url_for('site.profile_recipe_delete',recipeID=recipe[1][0])}}">
+                            <form id="recipeForm" method="POST"
+                                  action="{{ url_for('site.profile_recipe_delete', recipeID=recipe[1][0]) }}">
 
                                 <button type="submit" class="btn btn-info btn-xs">Delete</button>
-                            </form>>
+                            </form>
+
 
                         </div>
                     </div>
 
                 {% endif %}
+                <br>
+                <br>
             {% endfor %}
 
         </div>
 
-        <div class="col-md-4 col-md-4" id="profile_ingredients">
-
-            <h2>My Ingredients
-                <a href="/profile/ingredientAdd" class="btn btn-info btn-md"><i
-                        class="glyphicon glyphicon-plus"></i>
-                </a>
-            </h2>
+        <div class="col-md-3 col-md-3" id="profile_ingredients">
 
 
             <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
-                <div class="card-header" style="color:orangered">MY INGREDIENTS</div>
+                <div class="card-header" style="color:orangered">My Ingredients
+                    <a href="/profile/ingredientAdd" class="btn btn-info btn-md"><i
+                            class="glyphicon glyphicon-plus"></i>
+                    </a></div>
                 <div class="card-body">
                     {% for i in ingredients %}
-                        <p class="card-text" style="color:black">Ingredient: {{ i[0] }} Amount: {{ i[1] }}</p>
+                        <p class="card-text" style="color:black">{{ i[0] }} Amount: {{ i[1] }}</p>
                     {% endfor %}
-                    <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
-                            class="glyphicon glyphicon-edit"></i>Edit</a>
+
                     <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>
                 </div>
             </div>
+             <br>
 
         </div>
 
-        <div class="col-md-4 col-md-4" id="profile_equipments">
-
-            <h2>My Equipments
-                <a href="/profile/equipmentAdd" class="btn btn-info btn-md"><i
-                        class="glyphicon glyphicon-plus"></i>
-                </a>
-            </h2>
+        <div class="col-md-3 col-md-3" id="profile_equipments">
 
 
             <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
-                <div class="card-header" style="color:orangered">MY EQUIPMENTS</div>
+                <div class="card-header" style="color:orangered">My Equipments
+                    <a href="/profile/equipmentAdd" class="btn btn-info btn-md"><i
+                            class="glyphicon glyphicon-plus"></i>
+                    </a></div>
                 <div class="card-body">
                     {% for i in equipments %}
-                        <p class="card-text" style="color:black">EQUIPMENT: {{ i[0] }} SIZE: {{ i[1] }}</p>
+                        <p class="card-text" style="color:black">{{ i[0] }} Size: {{ i[1] }}</p>
                     {% endfor %}
-                    <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
-                            class="glyphicon glyphicon-edit"></i>Edit</a>
+
                     <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>
                 </div>
             </div>
