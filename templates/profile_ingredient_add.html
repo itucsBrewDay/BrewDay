@@ -5,12 +5,12 @@
         <fieldset>
 
             <!-- Form Name -->
-            <legend>Ingredient Add</legend>
+            <legend style="color: white">Ingredient Add</legend>
 
             <!-- Type input-->
             {% for ingredient in ingredients %}
                 <div class="form-group">
-                <label class="col-md-3 control-label" for="TypeID">{{ ingredient[1] }} </label>
+                <label class="col-md-3 control-label" style="color: white" for="TypeID">{{ ingredient[1] }} </label>
                 <div class="col-md-3">
                     <input id="ingredientID" name="ingredient{{ ingredient[0] }}" placeholder="Amount" class="form-control input-md"
                            required="" type="text">
@@ -20,7 +20,7 @@
             {% endfor %}
             <!-- Button -->
             <div class="form-group">
-                <label class="col-md-3 control-label"></label>
+                <label class="col-md-3 control-label" style="color: white"></label>
                 <div class="col-md-3">
                     <button id="add_button" name="add_button" class="btn btn-success">Add Ingredient</button>
                 </div>

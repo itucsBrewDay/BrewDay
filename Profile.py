@@ -34,10 +34,10 @@ class Profile():
                 cursor.execute(query)
 
             except dbapi2.Error:
-                print("rollback ERROR")
+                #print("rollback ERROR")
                 connection.rollback()
             else:
-                print("ERROR")
+                #print("ERROR")
                 userInfo = cursor.fetchall()
                 connection.commit()
 
@@ -138,13 +138,13 @@ class Profile():
                 for i in ingredient:
                     if i[1] == j[4]:
                         ctrl = ctrl + 1
-                        print(ctrl)
+
                 if ctrl == 4:
                     newList.append(j[0])
                 if counter == 4:
                     ctrl = 1
                     counter = 1
-            print(newList)
+
             for recipe in recipeInfo:
                 if recipe[0] in newList:
                     k = recipe[0]
@@ -167,7 +167,7 @@ class Profile():
                 cursor.execute(query)
 
             except dbapi2.Error:
-                print("ROLLBACK ERROR")
+                #print("ROLLBACK ERROR")
                 connection.rollback()
             else:
                 recipeInfo = cursor.fetchall()
@@ -177,7 +177,7 @@ class Profile():
             k = 0
             lastID = 0
             for i in recipeInfo:
-                print(k)
+
                 if j == 0:
                     list[0].append(i)
                     lastID = i[0]
@@ -200,8 +200,8 @@ class Profile():
             try:
                 cursor.execute(query)
             except dbapi2.Error:
-
-                print("RollBack Error")
+                connection.rollback()
+                #print("RollBack Error")
             else:
                 connection.commit()
             query = "DELETE FROM RECIPEINFO WHERE recipeID= '%d'" % (recipeID)
@@ -209,7 +209,7 @@ class Profile():
             try:
                 cursor.execute(query)
             except dbapi2.Error:
-                print("ROLLBACK ERROR")
+
                 connection.rollback()
             else:
                 connection.commit()

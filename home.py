@@ -77,7 +77,7 @@ def register_page():
     if request.method == 'GET':
         return render_template('register.html')
     else:
-        print("register add")
+
         name = request.form['name']
         surname = request.form['surname']
         email = request.form['email']
@@ -95,7 +95,7 @@ def register_page():
 @site.route('/search_recipe', methods=['GET', 'POST'])
 @login_required
 def search_recipe():
-    print("Current user:", current_user.username)
+
     if request.method == 'GET':
         return render_template('search_recipe.html')
     else:
@@ -108,13 +108,13 @@ def search_recipe():
 def profile_page():
     if request.method == 'GET':
         userInfo = Profile.get_userInfo(current_user.username)
-        print(userInfo)
+
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
         recipeDic = Profile.whatShouldIBrewToday()
         recipe_suggestions = []
-        print(recipeDic)
+
         if recipeDic:
             recipe_suggestions.append(list(recipeDic.keys())[0])
             recipe_suggestions.append(list(recipeDic.values())[0])
@@ -125,9 +125,8 @@ def profile_page():
 @site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])
 @login_required
 def profile_recipe_delete(recipeID):
-    print("DELETE RECiPE")
+
     if request.method == 'POST':
-        print("DELETE recipeid", recipeID)
         Profile.deleteRecipe(recipeID)
 
     return redirect(url_for('site.profile_page'))
@@ -136,23 +135,22 @@ def profile_recipe_delete(recipeID):
 @site.route('/profile/apply/<int:recipeID>', methods=['GET', 'POST'])
 @login_required
 def profile_apply_recipe(recipeID):
-    print(recipeID)
+
     retval = Profile.recipeApply(recipeID)
-    print(retval)
     return redirect(url_for('site.profile_page'))
 
 
 @site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])
 @login_required
 def profile_edit(userID):
-    print("Current user:", current_user.username)
+
     if request.method == 'GET':
         userInfo = Profile.get_userInfo(current_user.username)
-        print(userInfo)
+
         return render_template('profile_edit.html', userInfo=userInfo)
     else:
         newUserInfo = []
-        print("Update Profile")
+
         newUserInfo.append(request.form['name'])
         newUserInfo.append(request.form['surname'])
         newUserInfo.append(request.form['email'])
@@ -171,7 +169,7 @@ def profile_recipe_add():
 
     if request.method == 'GET':
         ingredients = IngredientDatabase.getAllIngredients()
-        print(ingredients)
+
         return render_template('profile_recipe_add.html', ingredients=ingredients)
     # query = """ SELECT ID,NAME FROM PARAMETERTYPE WHERE ID='%d'"""% TYPE
     # cursor.execute(query)
@@ -192,7 +190,7 @@ def profile_recipe_add():
         ingredient = []
         for i in ingredientIdList:
             ingredientid = "ingredient{}".format(str(i))
-            print(ingredientid)
+
             ingredient.append(request.form[ingredientid])
 
         recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure)
@@ -225,7 +223,7 @@ def profile_ingredient_add():
 
     if request.method == 'GET':
         ingredients = IngredientDatabase.getAllIngredients()
-        print(ingredients)
+
         return render_template('profile_ingredient_add.html', ingredients=ingredients)
     else:
         ingredient_list = IngredientDatabase.getAllIngredients()
@@ -236,7 +234,7 @@ def profile_ingredient_add():
         ingredient = []
         for i in ingredientIdList:
             ingredientid = "ingredient{}".format(str(i))
-            print(ingredientid)
+
             ingredient.append(request.form[ingredientid])
 
         for i in ingredientIdList:

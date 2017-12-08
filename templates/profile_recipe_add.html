@@ -5,11 +5,11 @@
         <fieldset>
 
             <!-- Form Name -->
-            <legend>Recipe Add</legend>
+            <legend style="color: white">Recipe Add</legend>
 
             <!-- Type input-->
             <div class="form-group">
-                <label class="col-md-3 control-label" for="TypeID">Recipe Name</label>
+                <label class="col-md-3 control-label" style="color: white" for="TypeID">Recipe Name</label>
                 <div class="col-md-3">
                     <input id="TypeID" name="recipeName" placeholder="Recipe Name" class="form-control input-md"
                            required="" type="text">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="form-group">
-                 <label class="col-md-3 control-label" for="exampleFormControlTextarea1">Description</label>
+                 <label class="col-md-3 control-label" style="color: white" for="exampleFormControlTextarea1">Description</label>
                 <div class="col-md-3">
 
                     <textarea style="resize :none" class="form-control" id="exampleFormControlTextarea1" name="description"
@@ -25,14 +25,14 @@
                 </div>
             </div>
             <div class="form-group">
-                 <label class="col-md-3 control-label" for="comment">Procedure</label>
+                 <label class="col-md-3 control-label" style="color: white" for="comment">Procedure</label>
                 <div class="col-md-3">
                     <textarea class="form-control" style="resize :none"  rows="5" id="exampleFormControlTextarea2" name="procedure"></textarea>
                 </div>
             </div>
             {% for ingredient in ingredients %}
                 <div class="form-group">
-                <label class="col-md-3 control-label" for="TypeID">{{ ingredient[1] }} </label>
+                <label class="col-md-3 control-label" style="color: white" for="TypeID">{{ ingredient[1] }} </label>
                 <div class="col-md-3">
                     <input id="ingredientID" name="ingredient{{ ingredient[0] }}" placeholder="Amount" class="form-control input-md"
                            required="" type="text">
