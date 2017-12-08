@@ -14,7 +14,7 @@ from Recipe import Recipe
 from Profile import Profile
 from ingredient import IngredientDatabase, IngredientMapDatabase
 from recipeV2 import RecipeDatabase, RecipeMapDatabase
-from equipment import EquipmentDatabase,EquipmentTypeDatabase
+from equipment import EquipmentDatabase, EquipmentTypeDatabase
 
 site = Blueprint('site', __name__)
 
@@ -99,7 +99,8 @@ def search_recipe():
     if request.method == 'GET':
         return render_template('search_recipe.html')
     else:
-        return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']), like=request.form['search'])
+        return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']),
+                               like=request.form['search'])
 
 
 @site.route('/profile', methods=['GET', 'POST'])
@@ -111,16 +112,27 @@ def profile_page():
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
-        return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, equipments = equipments)
+        return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients,
+                               equipments=equipments)
+
 
 @site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])
 @login_required
 def profile_recipe_delete(recipeID):
     print("DELETE RECiPE")
     if request.method == 'POST':
-        print("DELETE recipeid",recipeID)
+        print("DELETE recipeid", recipeID)
         Profile.deleteRecipe(recipeID)
 
+    return redirect(url_for('site.profile_page'))
+
+
+@site.route('/profile/apply/<int:recipeID>', methods=['GET', 'POST'])
+@login_required
+def profile_apply_recipe(recipeID):
+    print(recipeID)
+    retval = Profile.recipeApply(recipeID)
+    print(retval)
     return redirect(url_for('site.profile_page'))
 
 
@@ -174,6 +186,7 @@ def profile_recipe_add():
         ingredient = []
         for i in ingredientIdList:
             ingredientid = "ingredient{}".format(str(i))
+            print(ingredientid)
             ingredient.append(request.form[ingredientid])
 
         recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure)
@@ -187,15 +200,15 @@ def profile_recipe_add():
         return redirect(url_for('site.profile_page'))
 
 
-    # parameterName = request.form['parameterType']
-    #
-    #
-    # query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE,parameterName)
-    # cursor.execute(query)
-    #
-    # connection.commit()
-    #
-    # return redirect(url_for('site.parameters_page'))
+        # parameterName = request.form['parameterType']
+        #
+        #
+        # query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE,parameterName)
+        # cursor.execute(query)
+        #
+        # connection.commit()
+        #
+        # return redirect(url_for('site.parameters_page'))
 
 
 @site.route('/profile/ingredientAdd', methods=['GET', 'POST'])
@@ -224,6 +237,7 @@ def profile_ingredient_add():
             IngredientMapDatabase.ingredientAddOrUpdate(i, ingredient[i - 1])
 
         return redirect(url_for('site.profile_page'))
+
 
 @site.route('/profile/equipmentAdd', methods=['GET', 'POST'])
 @login_required

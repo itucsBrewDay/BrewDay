@@ -163,9 +163,9 @@ class Profile():
     def recipeApply(self, recipeID):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """SELECT IngredientID, Amount FROM RecipeMap WHERE RecipeID = %s"""
+            query = """SELECT IngredientID, Amount FROM RecipeMap WHERE RecipeID = %d""" %(recipeID)
             try:
-                cursor.execute(query, (recipeID))
+                cursor.execute(query)
 
             except dbapi2.Error:
                 connection.rollback()
@@ -174,10 +174,10 @@ class Profile():
                 connection.commit()
 
             userId = current_user.id
-            query = """SELECT IngredientID, Amount FROM IngredientMap WHERE UserID = %s"""
+            query = """SELECT IngredientID, Amount FROM IngredientMap WHERE UserID = %d""" %(userId)
 
             try:
-                cursor.execute(query, (userId))
+                cursor.execute(query)
 
             except dbapi2.Error:
                 connection.rollback()
@@ -207,7 +207,6 @@ class Profile():
                         except dbapi2.Error:
                             connection.rollback()
                         else:
-                            userIngredientInfo = cursor.fetchall()
                             connection.commit()
             cursor.close()
             return "Successful"

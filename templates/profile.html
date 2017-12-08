@@ -40,12 +40,15 @@
                             {% endfor %}
 
                             <!-- <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>-->
-                            <form id="recipeForm" method="POST"
+                            <form name="recipeApply" method="POST"
                                   action="{{ url_for('site.profile_recipe_delete', recipeID=recipe[1][0]) }}">
 
                                 <button type="submit" class="btn btn-info btn-xs">Delete</button>
-                            </form>
+                                <a href="/profile/apply/{{ recipe[1][0] }}" class="btn btn-default btn-xs pull-right"><i
+                                        class="glyphicon glyphicon-ok">Apply</i>
+                                </a>
 
+                            </form>
 
                         </div>
                     </div>
@@ -89,7 +92,7 @@
                         <p class="card-text" style="color:black">{{ i[0] }} Size: {{ i[1] }}</p>
                     {% endfor %}
 
-                    
+
                     <a href="/profile/equipmentAdd" class="btn btn-default btn-xs pull-right"><i
                             class="glyphicon glyphicon-edit"></i>
                     </a>
