@@ -15,13 +15,20 @@ class Equipment():
 
 class EquipmentDatabase:
     @classmethod
-    def addEquipment(cls, typeID, size):
+    def equipmentAddOrUpdate(cls, typeID, size):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            userId = current_user.id
-            CreateDate = datetime.datetime.now()
-            query = """INSERT INTO EquipmentInfo (userID, typeID, size, CreateDate) VALUES (%s, %s, %s, %s)"""
-            cursor.execute(query, (userId, typeID, size, CreateDate,))
+            userID = current_user.id
+            query = """SELECT COUNT(*) FROM EquipmentInfo WHERE UserID = %s and typeID = %s"""
+            cursor.execute(query, (str(userID), str(typeID)))
+            count = cursor.fetchone()
+            if count[0] == 0:
+                query = """INSERT INTO EquipmentInfo (userID,typeID,size,createDate) VALUES (%s,%s,%s,%s)"""
+                cursor.execute(query, (userID,typeID,size,datetime.datetime.now()))
+            else:
+                query = """UPDATE EquipmentInfo SET size = '%s' WHERE UserID = %s and typeID = %s""" % (size, userID, typeID)
+                cursor.execute(query)
+            connection.commit()
             cursor.close()
 
     @classmethod
@@ -29,23 +36,16 @@ class EquipmentDatabase:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userID = current_user.id
-            query = """SELECT * FROM EquipmentInfo WHERE UserID=%s """
-
+            query = """SELECT l.name, k.size FROM EquipmentInfo as k, TypeParameter as l WHERE k.TypeID = l.ID and UserID=%s """%(userID)
             try:
-                cursor.execute(query, (userID,))
-                equipmentInfo = cursor.fetchone()
+                cursor.execute(query)
+                equipmentInfo = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
-
             cursor.close()
-
-            if equipmentInfo:
-                return Equipment(ID=equipmentInfo[0], userID=equipmentInfo[1], typeID=equipmentInfo[2], size=equipmentInfo[3],
-                              createDate=equipmentInfo[4],)
-            else:
-                return -1
+            return equipmentInfo
 
     @classmethod
     def deleteEquipmentOfUser(cls, id):
@@ -62,3 +62,21 @@ class EquipmentDatabase:
             connection.commit()
 
         cursor.close()
+
+class EquipmentTypeDatabase:
+    @classmethod
+    def getEquipmentTypes(cls):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            userID = current_user.id
+            query = """SELECT * FROM TypeParameter """
+            try:
+                cursor.execute(query)
+                equipmentInfo = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+            return equipmentInfo

@@ -87,9 +87,10 @@ class IngredientMapDatabase:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             userID = current_user.id
-            query = """SELECT COUNT(*) FROM IngredientMap WHERE UserID = %d"""%(userID)
-            count = cursor.execute(query)
-            if count == 0:
+            query = """SELECT COUNT(*) FROM IngredientMap WHERE UserID = %s and IngredientID = %s"""
+            cursor.execute(query,(str(userID),str(ingredientID)))
+            count = cursor.fetchone()
+            if count[0] == 0:
                 query = """INSERT INTO IngredientMap (userID,ingredientID,amount) VALUES (%s,%s,%s)"""
                 cursor.execute(query, (userID,ingredientID,amount))
             else:

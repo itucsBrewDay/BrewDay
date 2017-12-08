@@ -70,6 +70,28 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="col-md-4 col-md-4" id="profile_equipments">
+
+            <h2>My Equipments
+                <a href="/profile/equipmentAdd" class="btn btn-info btn-md"><i
+                        class="glyphicon glyphicon-plus"></i>
+                </a>
+            </h2>
+
+
+            <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
+                <div class="card-header" style="color:orangered">MY EQUIPMENTS</div>
+                <div class="card-body">
+                    {% for i in equipments %}
+                        <p class="card-text" style="color:black">EQUIPMENT: {{ i[0] }} SIZE: {{ i[1] }}</p>
+                    {% endfor %}
+                    <a href="/profile/recipe/0" class="btn btn-default btn-xs pull-right" role="button"><i
+                            class="glyphicon glyphicon-edit"></i>Edit</a>
+                    <a href="/profile/recipe/delete/0" class="btn btn-info btn-xs" role="button">Delete</a>
+                </div>
+            </div>
 
         </div>
 
