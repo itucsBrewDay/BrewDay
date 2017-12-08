@@ -14,6 +14,15 @@ class ProfileRecipe():
         self.procedure = procedure
         self.clickcount = clickcount
 
+
+class RecipeMap():
+    def __init__(self, ID, recipeID, ingredientID, amount):
+        self.ID = ID
+        self.recipeID = recipeID
+        self.ingredientID = ingredientID
+        self.amount = amount
+
+
 class RecipeDatabase:
     @classmethod
     def addRecipe(cls, name, description,procedure):
@@ -30,4 +39,14 @@ class RecipeDatabase:
             cursor.close()
             return lastrow
 
+
+class RecipeMapDatabase:
+    @classmethod
+    def addRecipe(cls, recipeID, ingredientID, amount):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO RecipeMap (recipeID,ingredientID,amount) VALUES (%s,%s,%s)"""
+            cursor.execute(query, (recipeID,ingredientID,amount))
+            connection.commit()
+            cursor.close()
 

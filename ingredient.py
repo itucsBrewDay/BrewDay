@@ -24,6 +24,7 @@ class IngredientDatabase:
             cursor = connection.cursor()
             query = """INSERT INTO IngredientParameter (name) VALUES (%s)"""
             cursor.execute(query, (name,))
+            connection.commit()
             cursor.close()
 
     @classmethod
@@ -91,6 +92,7 @@ class IngredientMapDatabase:
             cursor = connection.cursor()
             query = """INSERT INTO IngredientMap (userID,ingredientID,amount) VALUES (%s,%s,%s)"""
             cursor.execute(query, (userID,ingredientID,amount))
+            connection.commit()
             cursor.close()
 
     @classmethod
