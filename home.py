@@ -114,11 +114,10 @@ def profile_page():
         equipments = EquipmentDatabase.getEquipmentOfUser()
         recipeDic = Profile.whatShouldIBrewToday()
         recipe_suggestions = []
-        print(recipe_suggestions)
-        recipe_suggestions.append(list(recipeDic.keys())[0])
-        print(recipe_suggestions)
-        recipe_suggestions.append(list(recipeDic.values())[1])
-        print(recipe_suggestions)
+        print(recipeDic)
+        if recipeDic:
+            recipe_suggestions.append(list(recipeDic.keys())[0])
+            recipe_suggestions.append(list(recipeDic.values())[0])
         return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, recipe_suggestions = recipe_suggestions,
                                equipments=equipments)
 

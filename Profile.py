@@ -118,13 +118,38 @@ class Profile():
                 else:
                     recipeInfo = cursor.fetch()
                     connection.commit()
+            query = """SELECT * FROM IngredientParameter """
+            try:
+                cursor.execute(query)
+
+            except dbapi2.Error:
+                connection.rollback()
+
+            else:
+                ingredient = cursor.fetchall()
+                connection.commit()
             cursor.close()
             d = dict()
             merge = True
+            newList =[]
+            ctrl = 1
+            counter = 1
+            for j in recipeInfo:
+                for i in ingredient:
+                    if i[1] == j[4]:
+                        ctrl = ctrl + 1
+                        print(ctrl)
+                if ctrl == 4:
+                    newList.append(j[0])
+                if counter == 4:
+                    ctrl = 1
+                    counter = 1
+            print(newList)
             for recipe in recipeInfo:
-                k = recipe[0]
-                v = d.get(k, tuple()) + (recipe[:0] + recipe[0 + 1:] if merge else (recipe[:0] + recipe[0 + 1:],))
-                d.update({k: v})
+                if recipe[0] in newList:
+                    k = recipe[0]
+                    v = d.get(k, tuple()) + (recipe[:0] + recipe[0 + 1:] if merge else (recipe[:0] + recipe[0 + 1:],))
+                    d.update({k: v})
 
         return d
 

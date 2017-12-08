@@ -22,6 +22,7 @@
         </div>
         <div class="col-md-4 col-md-4" id="profile_suggestion">
             <h2>What should I brew today!</h2>
+                {% if recipe_suggestions[0] != NULL %}
                     <div class="card text-black bg-primary mb-3" style="max-width: 40rem;">
                         <div class="card-header" style="color:orangered">{{ recipe_suggestions[1][0] }}</div>
                         <div class="card-body">
@@ -42,6 +43,7 @@
 
                         </div>
                     </div>
+                {% endif %}
             <br>
 
         </div>
