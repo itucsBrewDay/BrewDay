@@ -30,9 +30,13 @@ def initialize_database():
 	return redirect(url_for('site.home_page'))
 
 
-@site.route('/')
-def home_page():
-	recipes = Recipe.getall()
+@site.route('/<int:pagenumber>')
+def home_page_number(pagenumber):
+	if pagenumber < 1:
+		pagenumber = 1
+	if pagenumber > 3:
+		pagenumber = 3
+	recipes = Recipe.getall(6, 6 * (pagenumber - 1))
 	for recipe in recipes:
 		recipe.desc = recipe.desc[:200] # anasayfada sadece max 150 kararkter göster
 		if recipe.desc[-1] == ' ':
@@ -40,7 +44,11 @@ def home_page():
 		recipe.desc += "..."
 	print("Current user: ", current_user.is_authenticated)
 
-	return render_template('home.html', recipes=recipes)
+	return render_template('home.html', recipes=recipes, current_page=pagenumber)
+
+@site.route('/')
+def home_page():
+	return redirect('/1')
 
 
 @site.route('/logout')

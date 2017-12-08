@@ -30,12 +30,15 @@ class Recipe:
 			cursor.close()
 
 	@classmethod
-	def getall(cls):
+	def getall(cls, limit = None, offset = None):
 		recipes = []
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """SELECT * FROM RecipeInfo"""
-
+			if limit is not None:
+				query += " limit %r" % limit
+			if offset is not None:
+				query += " offset %r" % offset
 			try:
 				cursor.execute(query)
 				for r in cursor:
