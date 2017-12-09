@@ -6,7 +6,7 @@
     <div class="container">
 
       <!-- Page Heading -->
-    <h1 class="page-header"> {% for recipe in recipes %}{{ recipe.name }}{% endfor %} </h1>
+    <h1 class="page-header"> {{ recipe.name }} </h1>
     <hr/>
     <br/>
 
@@ -30,12 +30,12 @@
             <div class="card-body">
                 <h5 class="card-title">
                     Rating <img src="https://img3-secure.targetimg3.com/wcsstore/marketing/com/uimod/299-11222017-01/images/icons/star-rating-off.svg" height="10" width="58">
-                    <br>Clicks: {% for recipe in recipes %}{{ recipe.clickCount }}{% endfor %}
+                    <br>Clicks: {{ recipe.clickCount }}
                 </h5>
                 <h4 class="card-title">
                     Description
                 </h4>
-                <p class="card-text">{% for recipe in recipes %}{{ recipe.desc }}{% endfor %}</p>
+                <p class="card-text">{{ recipe.desc }}</p>
                 <h4 class="card-title">
                     Ingredients
                 </h4>
@@ -43,7 +43,7 @@
                 <h4 class="card-title">
                     Procedure
                 </h4>
-                <p class="card-text">{% for recipe in recipes %}{{ recipe.procedure }}{% endfor %}</p>
+                <p class="card-text">{{ recipe.procedure }}</p>
             </div>
             </div>
         </div>
