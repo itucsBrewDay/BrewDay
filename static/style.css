@@ -93,6 +93,23 @@ body {
  	margin-top: 40px;
 }
 
+table {
+    color: #cdcdcd;
+    background-color: #115895;
+}
+
+th, tr, td {
+    border: 2px solid black;
+}
+
+.table-body-element:hover {
+    color: #222222;
+}
+
+.table-container {
+    color:#cdcdcd;
+}
+
 h1.title {
 	font-size: 50px;
 	font-weight: 400;
@@ -358,6 +375,8 @@ input::-webkit-input-placeholder {
         width: 100%
     }
 }
+/***********************/
+
 #profile{
     background-color:ghostwhite;
 
@@ -381,4 +400,3 @@ input::-webkit-input-placeholder {
     margin-left: 10%;
     float: right;
 }
-/***********************/

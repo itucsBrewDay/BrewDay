@@ -52,9 +52,9 @@ def home_page():
     return redirect('/1')
 
 @site.route('/recipe/<int:recipeID>')
+@login_required
 def show_recipe(recipeID):
         recipe = Recipe.get_recipe(recipeID)
-
         return render_template('recipe.html', recipes=recipe)
 
 
@@ -97,17 +97,11 @@ def register_page():
 
         return redirect(url_for('site.login_page'))
 
-
 @site.route('/search_recipe', methods=['GET', 'POST'])
 @login_required
 def search_recipe():
-
     if request.method == 'GET':
-        return render_template('search_recipe.html')
-    else:
-        return render_template('search_recipe.html', recipes=Recipe.get_like(request.form['search']),
-                               like=request.form['search'])
-
+        return render_template('search_recipe.html', recipes=Recipe.getall())
 
 @site.route('/profile', methods=['GET', 'POST'])
 @login_required

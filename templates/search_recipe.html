@@ -6,63 +6,30 @@
         <h1 class="page-header">Search Recipe</h1>
     </div>
     <hr class="vertical-shadow"/>
-    <div class="col-lg-2 search-object">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Filters</h3>
-            </div>
-            <div class = "panel-body">
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Option 1</label>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Option 2</label>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Option 3</label>
-                </div>
-            </div>
+    <div class="contaioner">
+        <div class="table-container">
+            <table data-pagination="true" data-search="true" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th data-sortable="true"> Name </th>
+                        <th data-sortable="true"> Create Date </th>
+                        <th data-sortable="true"> Clicked (Times) </th>
+                        <th data-sortable="true"> Score </th>
+                    </tr>
+                    <tbody>
+                    {% for recipe in recipes %}
+                            <tr class="table-body-element">
+                                <td><a href="/#" style="color : inherit;">{{ recipe.name }}</a></td> <!-- href'e recipe.id eklenecek -->
+                                <td>{{ recipe.createdate }}</td>
+                                <td>{{ recipe.clickCount }}</td>
+                                <td>{{ recipe.score }}</td>
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+                </thead>
+            </table>
         </div>
     </div>
-    <div class="col-lg-10">
-        <div class="form-group">
-            <form class="form-horizontal" method="POST" action="{{ url_for('site.search_recipe') }}">
-                <div class="row">
-                    <div class="col-sm-11 search-object">
-                        <input type="text" name="search" class="form-control" id="search" value="{{ like }}" />
-                    </div>
-                    <div class="col-sm-1 text-center search-object">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="contaioner">
-            <h4 class="found-count-info">
-                {% if recipes|length == 1 %}
-                    {{ recipes|length }} recipe found
-                {% elif recipes|length > 0 %}
-                    {{ recipes|length }} recipes found
-                {% endif %}
-            </h4>
-            <ul class="media-list">
-            {% for recipe in recipes %}
-            <li class="media">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="#">{{ recipe.name }}</a>
-                        </h4>
-                    <p class="card-text">{{ recipe.desc }}</p>
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <!-- radio button eklenecek (ordering and filtering) -->
-
 </div>
 
 {% endblock %}

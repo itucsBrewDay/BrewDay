@@ -5,13 +5,18 @@ from user import *
 
 
 class Recipe:
-	def __init__(cls, id, user, name, desc, procedure, clickCount):
+	def __init__(cls, id, user, cd, name, desc, procedure, clickCount, score=None):
 		cls.id = id
 		cls.user = user
+		cls.createdate = cd
 		cls.name = name
 		cls.desc = desc
 		cls.procedure = procedure
 		cls.clickCount = clickCount
+		if score is not None:
+			cls.score = float("{0:.2f}".format(score))
+		else:
+			cls.score = None
 
 	@staticmethod
 	def add(user, name, desc, procedure, malt=0, water=0, sugar=0): # eklenen Recipe'leri uygun map'lere de ekle!!!
@@ -61,7 +66,7 @@ class Recipe:
 			try:
 				cursor.execute(query)
 				for r in cursor:
-					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6], r[7] if r[7] is not None else 0))
 			except dbapi2.Error as err:
 				print("Recipe get_recent function Error:", err)
 				connection.rollback()
@@ -72,48 +77,51 @@ class Recipe:
 		return recipes
 
 	@staticmethod
-	def get_recipe(id):
+	def getall():
 		recipes = []
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """SELECT r.*, AVG(rc.rate) FROM RecipeInfo as r LEFT JOIN RateCommentInfo as rc
+						ON r.recipeid = rc.recipeid
+						GROUP BY r.recipeid"""
+
+			try:
+				cursor.execute(query)
+				for r in cursor:
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6], r[7] if r[7] is not None else 0))
+			except dbapi2.Error as err:
+				print("Recipe getall Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
+		return recipes
+
+	@staticmethod
+	def get_recipe(id):
+		recipe = None
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """SELECT * FROM RecipeInfo where recipeid = %d""" %id
 
 			try:
 				cursor.execute(query)
-				for r in cursor:
-					recipes.append(Recipe(r[0],UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
+				r = cursor.fetchone()[0]
+				recipe = Recipe(r[0],UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6])
 
 			except dbapi2.Error as err:
-				print("Recipe getall function Error:", err)
+				print("Recipe get_recipe function Error:", err)
 				connection.rollback()
 			else:
 				connection.commit()
 
 			cursor.close()
-		return recipes
-
-
-	@staticmethod
-	def get_like(like):
-		recipes = []
-		with dbapi2.connect(database.config) as connection:
-			cursor = connection.cursor()
-			query = """SELECT * FROM RecipeInfo where name like '%s%%' OR description like '%%%s%%'""" % (like, like)
-
-			try:
-				cursor.execute(query)
-				for r in cursor:
-					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[3], r[4], r[5], r[6]))
-			except dbapi2.Error as err:
-				print("Recipe get_like Error:", err)
-				connection.rollback()
-			else:
-				connection.commit()
-
-			cursor.close()
-		return recipes
+		return recipe
 
 	def get_score(self):
+		if self.score is not None:
+			return self.score
 		score = 0
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
@@ -129,6 +137,7 @@ class Recipe:
 			cursor.close()
 		if score is None:
 			score = 0
+		self.score = score
 		return score
 
 	def get_ingredients(self):
