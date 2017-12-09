@@ -39,7 +39,12 @@
                 <h4 class="card-title">
                     Ingredients
                 </h4>
-                <p class="card-text">--INGREDIENTS--</p>
+                <p class="card-text">
+
+                {% for i in ingredients %}
+                    <p class="card-text" style="color:black">{{ i[0] }} Amount: {{ i[1] }}</p>
+                {% endfor %}
+
                 <h4 class="card-title">
                     Procedure
                 </h4>

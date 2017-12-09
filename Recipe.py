@@ -166,3 +166,25 @@ class Recipe:
 				connection.commit()
 
 			cursor.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
