@@ -22,7 +22,7 @@
                                 <td><a href="/recipe/{{ recipe.id }}" style="color : inherit;">{{ recipe.name }}</a></td>
                                 <td>{{ recipe.createdate }}</td>
                                 <td>{{ recipe.clickCount }}</td>
-                                <td>{{ recipe.score }}</td>
+                                <td>{{ recipe.get_score() }}</td>
                             </tr>
                     {% endfor %}
                     </tbody>
