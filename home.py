@@ -55,7 +55,8 @@ def home_page():
 @login_required
 def show_recipe(recipeID):
         recipe = Recipe.get_recipe(recipeID)
-        return render_template('recipe.html', recipes=recipe)
+        recipe.increment_clickcount()
+        return render_template('recipe.html', recipe=recipe)
 
 
 @site.route('/logout')

@@ -107,7 +107,7 @@ class Recipe:
 
 			try:
 				cursor.execute(query)
-				r = cursor.fetchone()[0]
+				r = cursor.fetchone()
 				recipe = Recipe(r[0],UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6])
 
 			except dbapi2.Error as err:
@@ -157,3 +157,17 @@ class Recipe:
 
 			cursor.close()
 		return ingredients
+
+	def increment_clickcount(self):
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """UPDATE RecipeInfo set clickcount = clickcount + 1 where recipeid = %d""" % self.id
+			try:
+				cursor.execute(query)
+				self.clickCount += 1
+			except dbapi2.Error:
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
