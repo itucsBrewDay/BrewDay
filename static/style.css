@@ -110,6 +110,11 @@ th, tr, td {
     color:#cdcdcd;
 }
 
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
 h1.title {
 	font-size: 50px;
 	font-weight: 400;
@@ -403,7 +408,7 @@ input::-webkit-input-placeholder {
 
 /*********/
 article {
-    padding-left: 50px; /* arbitrary, to expose the "zero stars" area half a star to the left of the first star.*/
+    padding-left: 5px; /* arbitrary, to expose the "zero stars" area half a star to the left of the first star.*/
 }
 
 .star-rating {
@@ -524,4 +529,9 @@ label.rb10l:hover ~ .rating
 .ie8 .rating-bg,
 .ie8 .star-rating label.star {
     display: none;
+}
+
+.rating-item {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
