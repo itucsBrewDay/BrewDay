@@ -533,5 +533,9 @@ label.rb10l:hover ~ .rating
 
 .rating-item {
     margin-top: 20px;
-    margin-bottom: 20px;
+    padding-left: 100px;
+}
+
+.rating-button{
+margin-bottom:30px;
 }

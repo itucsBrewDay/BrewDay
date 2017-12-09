@@ -119,7 +119,7 @@ class Database:
             query = """CREATE TABLE RateCommentInfo (
                                                   ID SERIAL PRIMARY KEY,
                                                   RecipeID int  NOT NULL,
-                                                  Rate int  NOT NULL,
+                                                  Rate Numeric  NOT NULL,
                                                   Comment varchar(500)  NOT NULL,
                                                   UserID int  NOT NULL,
                                                   FOREIGN KEY (RecipeID) REFERENCES RecipeInfo(RecipeID),
