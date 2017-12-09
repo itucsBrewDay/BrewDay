@@ -5,7 +5,7 @@ from user import *
 
 
 class Recipe:
-	def __init__(cls, id, user, cd, name, desc, procedure, clickCount, score=None):
+	def __init__(cls, id, user, cd, name, desc, procedure, clickCount):
 		cls.id = id
 		cls.user = user
 		cls.createdate = cd
@@ -13,10 +13,6 @@ class Recipe:
 		cls.desc = desc
 		cls.procedure = procedure
 		cls.clickCount = clickCount
-		if score is not None:
-			cls.score = float("{0:.2f}".format(score))
-		else:
-			cls.score = None
 
 	@staticmethod
 	def add(user, name, desc, procedure, malt=0, water=0, sugar=0): # eklenen Recipe'leri uygun map'lere de ekle!!!
@@ -66,7 +62,7 @@ class Recipe:
 			try:
 				cursor.execute(query)
 				for r in cursor:
-					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6], r[7] if r[7] is not None else 0))
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6]))
 			except dbapi2.Error as err:
 				print("Recipe get_recent function Error:", err)
 				connection.rollback()
@@ -88,7 +84,7 @@ class Recipe:
 			try:
 				cursor.execute(query)
 				for r in cursor:
-					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6], r[7] if r[7] is not None else 0))
+					recipes.append(Recipe(r[0], UserLogin.select_user_with_id(r[1]), r[2], r[3], r[4], r[5], r[6]))
 			except dbapi2.Error as err:
 				print("Recipe getall Error:", err)
 				connection.rollback()
@@ -119,9 +115,7 @@ class Recipe:
 			cursor.close()
 		return recipe
 
-	def get_score(self):
-		if self.score is not None:
-			return self.score
+	def get_score(self): # used as nethot rather than a class variable because the score can be changed externally
 		score = 0
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
@@ -129,7 +123,8 @@ class Recipe:
 			try:
 				cursor.execute(query)
 				score = cursor.fetchone()[0]
-			except dbapi2.Error:
+			except dbapi2.Error as err:
+				print("get_score Error:", err)
 				connection.rollback()
 			else:
 				connection.commit()
@@ -137,8 +132,7 @@ class Recipe:
 			cursor.close()
 		if score is None:
 			score = 0
-		self.score = score
-		return score
+		return float("{0:.2f}".format(score))
 
 	def get_ingredients(self):
 		ingredients = {}
