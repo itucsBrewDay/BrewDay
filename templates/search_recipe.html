@@ -19,7 +19,7 @@
                     <tbody>
                     {% for recipe in recipes %}
                             <tr class="table-body-element">
-                                <td><a href="/#" style="color : inherit;">{{ recipe.name }}</a></td> <!-- href'e recipe.id eklenecek -->
+                                <td><a href="/recipe/{{ recipe.id }}" style="color : inherit;">{{ recipe.name }}</a></td>
                                 <td>{{ recipe.createdate }}</td>
                                 <td>{{ recipe.clickCount }}</td>
                                 <td>{{ recipe.score }}</td>
