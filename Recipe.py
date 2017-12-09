@@ -139,12 +139,13 @@ class Recipe:
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """SELECT i.name, m.amount FROM ingredientparameter as i, recipemap as m 
-					   WHERE m.ingredientid = i.id AND m.recipeid = %d AND m.amount > 0""" % self.id
+					   WHERE m.ingredientid = i.id AND m.recipeid = %d""" % self.id
 			try:
 				cursor.execute(query)
 				for i in cursor:
 					ingredients[i[0]] = i[1]
-			except dbapi2.Error:
+			except dbapi2.Error as err:
+				print("Recipe get_ingredients Error:", err)
 				connection.rollback()
 			else:
 				connection.commit()
