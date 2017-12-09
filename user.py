@@ -104,3 +104,41 @@ class UserLogin:
             connection.commit()
             cursor.close()
 
+    @classmethod
+    def get_status(cls, userid):
+        status = 0
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            query = """ select AVG(scores.s) from 
+                            (select rid.recipeid, coalesce(AVG(r.rate), 0) as s from
+                                (select recipeid from recipeinfo where userid = %d) 
+                                as rid
+                                left join
+                                ratecommentinfo as r
+                            on rid.recipeid = r.recipeid
+                            group by rid.recipeid)
+                        as scores
+                        """ % userid
+
+            try:
+                cursor.execute(query)
+                status = cursor.fetchone()[0]
+            except dbapi2.Error as err:
+                print("UserLogin get_status Error:", err)
+                connection.rollback()
+            else:
+                connection.commit()
+
+            status = float("{0:.2f}".format(status))
+            print("status:", status)
+
+            cursor.close()
+        if 1 <= status < 2.5:
+            return "Beginner Brewer"
+        elif 2.5 <= status < 4:
+            return "Intermediate Brewer"
+        elif 4 <= status <= 5:
+            return "Master Brewer"
+        else:
+            return ""

@@ -110,6 +110,7 @@ def profile_page():
     if request.method == 'GET':
         userInfo = Profile.get_userInfo(current_user.username)
 
+        status = UserLogin.get_status(userInfo[0][6])
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
@@ -120,7 +121,7 @@ def profile_page():
             recipe_suggestions.append(list(recipeDic.keys())[0])
             recipe_suggestions.append(list(recipeDic.values())[0])
         return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, recipe_suggestions = recipe_suggestions,
-                               equipments=equipments)
+                               equipments=equipments, status=status)
 
 
 @site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])

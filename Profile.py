@@ -33,11 +33,10 @@ class Profile():
             try:
                 cursor.execute(query)
 
-            except dbapi2.Error:
-                #print("rollback ERROR")
+            except dbapi2.Error as err:
+                print("get_userInfo ERROR:", err)
                 connection.rollback()
             else:
-                #print("ERROR")
                 userInfo = cursor.fetchall()
                 connection.commit()
 
@@ -112,7 +111,8 @@ class Profile():
                 try:
                     cursor.execute(query)
 
-                except dbapi2.Error:
+                except dbapi2.Error as err:
+                    print("Error:", err)
                     connection.rollback()
 
                 else:
