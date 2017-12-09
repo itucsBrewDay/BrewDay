@@ -115,7 +115,22 @@ class Recipe:
 			cursor.close()
 		return recipe
 
-	def get_score(self): # used as nethot rather than a class variable because the score can be changed externally
+	@staticmethod
+	def insert_rate_comment(recipeid, rate, comment, userid):
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = "INSERT INTO RateCommentInfo (recipeid, rate, comment, userid) VALUES (%d,%d,'%s',%d)" % (recipeid, rate, comment, userid)
+			try:
+				cursor.execute(query)
+			except dbapi2.Error as err:
+				print("insert_rate_comment Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
+
+	def get_score(self): # implemented as method rather than a class variable because the score can be changed externally
 		score = 0
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
