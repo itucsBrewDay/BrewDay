@@ -46,6 +46,7 @@ class Recipe:
 	@staticmethod
 	def get_recents(limit = None, offset = None):
 		recipes = []
+		count = 0
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """	SELECT * FROM 
@@ -69,8 +70,19 @@ class Recipe:
 			else:
 				connection.commit()
 
+			query = "SELECT COUNT(RecipeID) FROM RecipeInfo"
+
+			try:
+				cursor.execute(query)
+				count = cursor.fetchone()[0]
+			except dbapi2.Error as err:
+				print("Recipe get_recent function Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
 			cursor.close()
-		return recipes
+		return recipes, count
 
 	@staticmethod
 	def getall():

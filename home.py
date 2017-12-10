@@ -8,6 +8,7 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask_login import login_user, current_user, login_required, logout_user
+from math import ceil
 
 from user import UserLogin
 from Recipe import Recipe
@@ -25,7 +26,7 @@ def initialize_database():
     database.create_tables()
     database.init_db()
     UserLogin.init_admin()
-    for r in range(1, 19):
+    for r in range(1, 3):
         Recipe.add(UserLogin.select_user("admin"), "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
 
     return redirect(url_for('site.home_page'))
@@ -37,14 +38,15 @@ def home_page_number(pagenumber):
         pagenumber = 1
     if pagenumber > 3:
         pagenumber = 3
-    recipes = Recipe.get_recents(6, 6 * (pagenumber - 1))
+    recipes, count = Recipe.get_recents(6, 6 * (pagenumber - 1))
     for recipe in recipes:
-        recipe.desc = recipe.desc[:200]  # anasayfada sadece max 150 kararkter göster
+        recipe.desc = recipe.desc[:200]  # anasayfada sadece max 200 kararkter göster
         if recipe.desc[-1] == ' ':
             recipe.desc = recipe.desc[:-1]
         recipe.desc += "..."
 
-    return render_template('home.html', recipes=recipes, current_page=pagenumber)
+    maxpage = ceil(min(18, count) / 6)
+    return render_template('home.html', recipes=recipes, current_page=pagenumber, maxpage=maxpage)
 
 
 @site.route('/')
@@ -117,6 +119,7 @@ def profile_page():
         userInfo = Profile.get_userInfo(current_user.username)
 
         status = UserLogin.get_status(userInfo[0][6])
+        print("status:",status)
         recipes = Profile.getUserRecipe()
         ingredients = IngredientMapDatabase.getAllIngredientsOfUser()
         equipments = EquipmentDatabase.getEquipmentOfUser()
@@ -127,7 +130,7 @@ def profile_page():
             recipe_suggestions.append(list(recipeDic.values())[0])
 
         return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, recipe_suggestions = recipe_suggestions,
-                               equipments=equipments, status = status)
+                               equipments=equipments, status=status)
 
 
 @site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])
