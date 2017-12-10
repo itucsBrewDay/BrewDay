@@ -131,6 +131,16 @@ class Recipe:
 	def insert_rate_comment(recipeid, rate, comment, userid):
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
+
+			query = "DELETE FROM RateCommentInfo WHERE RecipeID = %s AND userid = %s" % (recipeid, userid)
+			try:
+				cursor.execute(query)
+			except dbapi2.Error as err:
+				print("delete rate comment Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
 			query = "INSERT INTO RateCommentInfo (recipeid, rate, comment, userid) VALUES (%d,%s,'%s',%d)" % (recipeid, rate, comment, userid)
 			try:
 				cursor.execute(query)
@@ -215,3 +225,23 @@ class Recipe:
 			cursor.close()
 
 		return rate
+
+	def get_comments(self):
+		comments = []
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = """SELECT u.username, r.rate, r.comment FROM UserInfo as u, RateCommentInfo as r
+			        WHERE u.userid = r.userid AND r.recipeid = %d""" % self.id
+			try:
+				cursor.execute(query)
+				for c in cursor:
+					comments.append((c[0], c[1], c[2]))
+			except dbapi2.Error as err:
+				print("get_comments Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
+
+			cursor.close()
+
+		return comments
