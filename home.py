@@ -51,14 +51,19 @@ def home_page_number(pagenumber):
 def home_page():
     return redirect('/1')
 
-@site.route('/recipe/<int:recipeID>')
+@site.route('/recipe/<int:recipeID>',methods=['GET','POST'])
 @login_required
 def show_recipe(recipeID):
-        recipe = Recipe.get_recipe(recipeID)
+    print("method:",request.method)
+    if request.method=='GET':
+        recipe=Recipe.get_recipe(recipeID)
         recipe.increment_clickcount()
-        ingredients = Recipe.get_ingredients(recipe);
-        return render_template('recipe.html', recipe=recipe,ingredients=ingredients)
-
+        ingredients=Recipe.get_ingredients(recipe);
+        return render_template('recipe.html',recipe=recipe,ingredients=ingredients)
+    else:
+        print("rate:",request.form['rate'])
+        Recipe.insert_rate_comment(recipeID,request.form['rate'],'comment',current_user.id)
+        return redirect(url_for('site.show_recipe',recipeID=recipeID))
 
 @site.route('/logout')
 @login_required
