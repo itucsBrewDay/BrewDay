@@ -10,6 +10,11 @@
             </div>
             <hr class="vertical-shadow"/>
             <div class="main-login main-center">
+                {% if error %}
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> Wrong username or password. Please try again...
+                </div>
+                {% endif %}
                 <form class="form-horizontal" action="{{ url_for('site.login_page') }}" method="post">
                     <fieldset>
 

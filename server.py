@@ -13,7 +13,6 @@ lm = LoginManager()
 def load_user(user_id):
     return UserLogin.select_user_with_id(user_id)
 
-
 def create_app():
     app.config.from_object('settings')
     app.register_blueprint(site)
