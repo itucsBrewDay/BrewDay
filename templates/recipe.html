@@ -12,11 +12,12 @@
             </div>
         </div>
 
+        {% if not hisrecipe %}
         <form id="form" method="POST">
             <div class="row ">
                 <div class="container col-lg-7 col-md-8 col-sm-10 col-centered text-center align-self-center rating-item">
                     <div class="text-left">
-                        <input id="rate" name="rate" value="4" type="text" class="rating" data-min=0 data-max=5 data-step=0.2 data-size="lg" required title="">
+                        <input id="rate" name="rate" value="{{ userrating }}" type="text" class="rating" data-min=0 data-max=5 data-step=0.2 data-size="lg" required title="">
                     </div>
                 </div>
             </div>
@@ -27,14 +28,14 @@
                 </div>
             </div>
         </form>
-
+        {% endif %}
         <div class="row">
             <div class="col-lg-7 col-md-8 col-sm-9 col-xs-10 col-centered recipe-item">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">
-                            Rating <img src="https://img3-secure.targetimg3.com/wcsstore/marketing/com/uimod/299-11222017-01/images/icons/star-rating-off.svg" height="10" width="58">
-                            <br>Clicks: {{ recipe.clickCount }}
+                            Score: {{ recipe.get_score() }}<br>
+                            Clicks: {{ recipe.clickCount }}
                         </h5>
                         <h4 class="card-title"> Description </h4>
                         <p class="card-text">{{ recipe.desc }}</p>

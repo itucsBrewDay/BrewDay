@@ -57,13 +57,14 @@ def home_page():
 @login_required
 def show_recipe(recipeID):
     print("method:",request.method)
-    if request.method=='GET':
-        recipe=Recipe.get_recipe(recipeID)
+    if request.method == 'GET':
+        recipe = Recipe.get_recipe(recipeID)
         recipe.increment_clickcount()
-        ingredients=Recipe.get_ingredients(recipe);
-        return render_template('recipe.html',recipe=recipe,ingredients=ingredients)
+        ingredients = Recipe.get_ingredients(recipe)
+        userrating = recipe.get_user_rate(current_user.id)
+        userrating = round(userrating * 5) / 5
+        return render_template('recipe.html',recipe=recipe,ingredients=ingredients, userrating=userrating, hisrecipe=(current_user.id == recipe.user.id))
     else:
-        print("rate:",request.form['rate'])
         Recipe.insert_rate_comment(recipeID,request.form['rate'],'comment',current_user.id)
         return redirect(url_for('site.show_recipe',recipeID=recipeID))
 
@@ -72,7 +73,6 @@ def show_recipe(recipeID):
 def logout():
     logout_user()
     return redirect(url_for('site.home_page'))
-
 
 @site.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -86,6 +86,7 @@ def login_page():
                 login_user(user)
                 return redirect(url_for('site.home_page'))
 
+        return render_template('login.html', error=True)
 
 @site.route('/register', methods=['GET', 'POST'])
 def register_page():
