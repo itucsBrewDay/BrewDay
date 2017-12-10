@@ -26,7 +26,7 @@ def initialize_database():
     database.create_tables()
     database.init_db()
     UserLogin.init_admin()
-    for r in range(1, 3):
+    for r in range(1, 19):
         Recipe.add(UserLogin.select_user("admin"), "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
 
     return redirect(url_for('site.home_page'))
