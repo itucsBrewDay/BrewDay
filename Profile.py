@@ -3,7 +3,8 @@ from database import database
 import datetime
 from user import *
 from itertools import groupby
-from flask_login import  current_user
+from flask_login import current_user
+
 
 class Profile():
     def __init__(cls, id, username, name, surname, email):
@@ -22,13 +23,12 @@ class Profile():
             cls.ingredient = ingredient
             cls.amount = amount
 
-
     @classmethod
-    def get_userInfo(cls,username):
+    def get_userInfo(cls, username):
         userInfo = None
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """SELECT Name,Surname,Mail,CreateDate,LastLoginDate,Username,UserID FROM UserInfo WHERE Username ='%s'""" %username
+            query = """SELECT Name,Surname,Mail,CreateDate,LastLoginDate,Username,UserID FROM UserInfo WHERE Username ='%s'""" % username
 
             try:
                 cursor.execute(query)
@@ -44,26 +44,26 @@ class Profile():
         return userInfo
 
     @classmethod
-    def update_userInfo(cls, userID,newUserInfo):
+    def update_userInfo(cls, userID, newUserInfo):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             try:
                 if newUserInfo[0] != '':
-                    query = """UPDATE UserInfo SET Name = '%s' WHERE userID = %d""" % (newUserInfo[0],int(userID))
+                    query = """UPDATE UserInfo SET Name = '%s' WHERE userID = %d""" % (newUserInfo[0], int(userID))
                     cursor.execute(query)
                 if newUserInfo[1] != '':
-                    query = """UPDATE UserInfo SET Surname = '%s' WHERE userID = %d""" % (newUserInfo[1],int(userID))
+                    query = """UPDATE UserInfo SET Surname = '%s' WHERE userID = %d""" % (newUserInfo[1], int(userID))
                     cursor.execute(query)
                 if newUserInfo[2] != '':
-                    query = """UPDATE UserInfo SET Mail = '%s' WHERE userID = %d""" % (newUserInfo[2],int(userID))
+                    query = """UPDATE UserInfo SET Mail = '%s' WHERE userID = %d""" % (newUserInfo[2], int(userID))
                     cursor.execute(query)
                 if newUserInfo[3] != '':
-                    query = """UPDATE UserInfo SET Username = '%s' WHERE userID = %d""" % (newUserInfo[3],int(userID))
+                    query = """UPDATE UserInfo SET Username = '%s' WHERE userID = %d""" % (newUserInfo[3], int(userID))
                     cursor.execute(query)
                 if newUserInfo[4] != '':
                     hashp = pwd_context.encrypt(newUserInfo[4])
-                    query = """UPDATE UserInfo SET Password = '%s' WHERE userID = %d""" % (hashp,int(userID))
+                    query = """UPDATE UserInfo SET Password = '%s' WHERE userID = %d""" % (hashp, int(userID))
                     cursor.execute(query)
 
             except dbapi2.Error:
@@ -104,20 +104,37 @@ class Profile():
                     recipeInfo = cursor.fetchall()
                     connection.commit()
             else:
-                query = """SELECT k.RecipeID, l.name, l.description, l.procedure, y.name, k.amount  FROM IngredientMap as x, IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
-                                                  WHERE x.UserID = %d and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount and l.RecipeID = a.RecipeID
-                                                    ORDER BY AVG(a.Rate) DESC
-                                                      """ % (userId)
+                query = """SELECT k.RecipeID
+                            FROM IngredientMap as x, IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
+                                    WHERE x.UserID = 2 and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount and l.RecipeID = a.RecipeID
+                                      GROUP BY k.recipeID
+                                              ORDER BY AVG(a.rate) DESC"""
                 try:
                     cursor.execute(query)
 
                 except dbapi2.Error as err:
-                    print("Error:", err)
                     connection.rollback()
 
                 else:
-                    recipeInfo = cursor.fetch()
+                    recipeIDs = cursor.fetchone()
                     connection.commit()
+                    recipeID = recipeIDs[0]
+
+                query = """SELECT k.RecipeID, l.name, l.description, l.procedure, y.name, k.amount
+                            FROM IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
+                                WHERE y.ID = k.IngredientID and k.RecipeID = l.RecipeID and l.RecipeID = a.RecipeID and a.RecipeID = '%s'
+                                                      """ % (recipeID)
+                try:
+                    cursor.execute(query)
+
+                except dbapi2.Error as err:
+                    connection.rollback()
+
+                else:
+                    recipeInfo = cursor.fetchall()
+                    connection.commit()
+
+
             query = """SELECT * FROM IngredientParameter """
             try:
                 cursor.execute(query)
@@ -131,7 +148,7 @@ class Profile():
             cursor.close()
             d = dict()
             merge = True
-            newList =[]
+            newList = []
             ctrl = 1
             counter = 1
             for j in recipeInfo:
@@ -151,7 +168,8 @@ class Profile():
                     v = d.get(k, tuple()) + (recipe[:0] + recipe[0 + 1:] if merge else (recipe[:0] + recipe[0 + 1:],))
                     d.update({k: v})
 
-        return d
+            return d
+
 
     @classmethod
     def getUserRecipe(self):
@@ -160,19 +178,19 @@ class Profile():
             userId = current_user.id
             recipeInfo = None
             query = """SELECT k.RecipeID, k.name, k.description, k.procedure, m.name, l.amount
-                        FROM RecipeInfo as k, RecipeMap as l, IngredientParameter as m 
-                         WHERE k.RecipeID = l.RecipeID  AND l.IngredientID = m.ID and k.userID = %d
-                         """ % (userId)
+                            FROM RecipeInfo as k, RecipeMap as l, IngredientParameter as m 
+                             WHERE k.RecipeID = l.RecipeID  AND l.IngredientID = m.ID and k.userID = %d
+                             """ % (userId)
             try:
                 cursor.execute(query)
 
             except dbapi2.Error:
-                #print("ROLLBACK ERROR")
+                # print("ROLLBACK ERROR")
                 connection.rollback()
             else:
                 recipeInfo = cursor.fetchall()
                 connection.commit()
-            list = [[]for a in range(50)]
+            list = [[] for a in range(50)]
             j = 0
             k = 0
             lastID = 0
@@ -192,6 +210,7 @@ class Profile():
             cursor.close()
         return list
 
+
     @classmethod
     def deleteRecipe(self, recipeID):
         with dbapi2.connect(database.config) as connection:
@@ -201,7 +220,7 @@ class Profile():
                 cursor.execute(query)
             except dbapi2.Error:
                 connection.rollback()
-                #print("RollBack Error")
+                # print("RollBack Error")
             else:
                 connection.commit()
             query = "DELETE FROM RECIPEINFO WHERE recipeID= '%d'" % (recipeID)
@@ -216,11 +235,12 @@ class Profile():
             cursor.close()
             return
 
+
     @classmethod
     def recipeApply(self, recipeID):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """SELECT IngredientID, Amount FROM RecipeMap WHERE RecipeID = %d""" %(recipeID)
+            query = """SELECT IngredientID, Amount FROM RecipeMap WHERE RecipeID = %d""" % (recipeID)
             try:
                 cursor.execute(query)
 
@@ -231,7 +251,7 @@ class Profile():
                 connection.commit()
 
             userId = current_user.id
-            query = """SELECT IngredientID, Amount FROM IngredientMap WHERE UserID = %d""" %(userId)
+            query = """SELECT IngredientID, Amount FROM IngredientMap WHERE UserID = %d""" % (userId)
 
             try:
                 cursor.execute(query)
@@ -241,7 +261,6 @@ class Profile():
             else:
                 userIngredientInfo = cursor.fetchall()
                 connection.commit()
-
 
         ctrl = 0
         for i in recipeIngredientInfo:
@@ -259,7 +278,7 @@ class Profile():
                         query = """UPDATE IngredientMap SET Amount = %s WHERE IngredientID = %s"""
 
                         try:
-                            cursor.execute(query, (j[1]-i[1],i[0]))
+                            cursor.execute(query, (j[1] - i[1], i[0]))
 
                         except dbapi2.Error:
                             connection.rollback()

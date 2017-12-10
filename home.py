@@ -117,12 +117,12 @@ def profile_page():
         equipments = EquipmentDatabase.getEquipmentOfUser()
         recipeDic = Profile.whatShouldIBrewToday()
         recipe_suggestions = []
-
         if recipeDic:
             recipe_suggestions.append(list(recipeDic.keys())[0])
             recipe_suggestions.append(list(recipeDic.values())[0])
+
         return render_template('profile.html', userInfo=userInfo, recipes=recipes, ingredients=ingredients, recipe_suggestions = recipe_suggestions,
-                               equipments=equipments, status=status)
+                               equipments=equipments, status = status)
 
 
 @site.route('/profile/delete/<int:recipeID>/', methods=['GET', 'POST'])
