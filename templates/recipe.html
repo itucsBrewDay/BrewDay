@@ -1,77 +1,54 @@
 {% extends "layout.html" %}
 {% block content %}
 
-
     <!-- Page Content -->
     <div class="container">
+        <h1 class="page-header"> {{ recipe.name }} </h1>
+        <hr/><br/>
 
-      <!-- Page Heading -->
-    <h1 class="page-header"> {{ recipe.name }} </h1>
-    <hr/>
-    <br/>
-
-    </div>
-<div class="row">
-    <div class="container col-lg-5 col-md-7 col-sm-8 col-xs-10 col-centered text-center">
-        <img src="https://image.flaticon.com/icons/svg/39/39467.svg" height="180" width="170">
-    </div>
-</div>
-
-
-<div class="row ">
-    <div class="container col-lg-6 col-md-8 col-sm-10 col-xs-10 col-centered text-center align-self-center rating-item">
-        <div class="text-left">
-            <input id="input-21b" value="4" type="text" class="rating" data-min=0 data-max=5 data-step=0.2 data-size="lg"
-                   required title="">
-        </div>
-    </div> <!-- star-rating -->
-</div>
-
-<div class="row">
-    <div class="col text-center align-self-center rating-button">
-        <button class="btn btn-primary"> Submit </button>
-    </div>
-</div>
-    <div class="row">
-        <div class="col-lg-5 col-md-7 col-sm-8 col-xs-10 col-centered recipe-item">
-            <div class="card h-100">
-            <!-- <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a> -->
-            <div class="card-body">
-                <h5 class="card-title">
-                    Rating <img src="https://img3-secure.targetimg3.com/wcsstore/marketing/com/uimod/299-11222017-01/images/icons/star-rating-off.svg" height="10" width="58">
-                    <br>Clicks: {{ recipe.clickCount }}
-                </h5>
-                <h4 class="card-title">
-                    Description
-                </h4>
-                <p class="card-text">{{ recipe.desc }}</p>
-                <h4 class="card-title">
-                    Ingredients
-                </h4>
-                <p class="card-text">
-
-                {% for i in ingredients %}
-                    <p class="card-text" style="color:black">{{ i }} Amount: {{ ingredients[i] }}</p>
-                {% endfor %}
-
-                <h4 class="card-title">
-                    Procedure
-                </h4>
-                <p class="card-text">{{ recipe.procedure }}</p>
+        <div class="row">
+            <div class="container col-lg-5 col-md-7 col-sm-8 col-xs-10 col-centered text-center">
+                <img src="https://image.flaticon.com/icons/svg/39/39467.svg" height="180" width="170">
             </div>
+        </div>
+
+        <div class="row ">
+            <div class="container col-lg-7 col-md-8 col-sm-10 col-centered text-center align-self-center rating-item">
+                <div class="text-left">
+                    <input id="input-21b" value="4" type="text" class="rating" data-min=0 data-max=5 data-step=0.2 data-size="lg" required title="">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-center align-self-center rating-button">
+                <button class="btn btn-primary"> Submit </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7 col-md-8 col-sm-9 col-xs-10 col-centered recipe-item">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Rating <img src="https://img3-secure.targetimg3.com/wcsstore/marketing/com/uimod/299-11222017-01/images/icons/star-rating-off.svg" height="10" width="58">
+                            <br>Clicks: {{ recipe.clickCount }}
+                        </h5>
+                        <h4 class="card-title"> Description </h4>
+                        <p class="card-text">{{ recipe.desc }}</p>
+                        <h4 class="card-title"> Ingredients </h4>
+
+                        {% for i in ingredients %}
+                        <p class="card-text" style="color: black;">{{ i }} Amount: {{ ingredients[i] }}</p>
+                        {% endfor %}
+
+                        <h4 class="card-title"> Procedure </h4>
+                        <p class="card-text">{{ recipe.procedure }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
-    </div>
-
-
-      <!-- Pagination -->
-
-    </div>
-    <!-- /.container -->
-
 
 {% endblock %}
 

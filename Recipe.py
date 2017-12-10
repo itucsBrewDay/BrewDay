@@ -119,7 +119,7 @@ class Recipe:
 	def insert_rate_comment(recipeid, rate, comment, userid):
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
-			query = "INSERT INTO RateCommentInfo (recipeid, rate, comment, userid) VALUES (%d,%d,'%s',%d)" % (recipeid, rate, comment, userid)
+			query = "INSERT INTO RateCommentInfo (recipeid, rate, comment, userid) VALUES (%d,%s,'%s',%d)" % (recipeid, rate, comment, userid)
 			try:
 				cursor.execute(query)
 			except dbapi2.Error as err:
