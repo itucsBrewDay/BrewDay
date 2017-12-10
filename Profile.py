@@ -106,19 +106,25 @@ class Profile():
             else:
                 query = """SELECT k.RecipeID
                             FROM IngredientMap as x, IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
-                                    WHERE x.UserID = 2 and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount and l.RecipeID = a.RecipeID
+                                    WHERE x.UserID = %d and x.IngredientID = y.ID and k.IngredientID = x.IngredientID and k.RecipeID = l.RecipeID and x.amount >= k.amount and l.RecipeID = a.RecipeID
                                       GROUP BY k.recipeID
-                                              ORDER BY AVG(a.rate) DESC"""
+                                              ORDER BY AVG(a.rate) DESC""" % (userId)
                 try:
                     cursor.execute(query)
 
-                except dbapi2.Error as err:
+                except dbapi2.Error:
                     connection.rollback()
 
                 else:
                     recipeIDs = cursor.fetchone()
                     connection.commit()
-                    recipeID = recipeIDs[0]
+                    if recipeIDs is not None:
+                        recipeID = recipeIDs[0]
+                    else:
+                        recipeID = None
+
+                if recipeID is None:
+                    return None
 
                 query = """SELECT k.RecipeID, l.name, l.description, l.procedure, y.name, k.amount
                             FROM IngredientParameter as y, RecipeMap as k, RecipeInfo as l, RateCommentInfo as a
