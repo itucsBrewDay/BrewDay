@@ -130,6 +130,8 @@ class UserLogin:
                 connection.commit()
             cursor.close()
 
+        if status is None:
+            status = 0
         status = float("{0:.2f}".format(status))
 
         if 1 <= status < 2.5:

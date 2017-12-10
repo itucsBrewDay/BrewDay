@@ -176,6 +176,15 @@ input::-webkit-input-placeholder {
     height: 100%!important
 }
 
+.comments {
+    overflow-y: scroll;
+    height: 350px;
+}
+
+.recipe-title {
+    color: #120150;
+}
+
 /**********************************/
 .card {
     position: relative;

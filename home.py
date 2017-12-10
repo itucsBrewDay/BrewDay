@@ -41,6 +41,8 @@ def home_page_number(pagenumber):
     recipes, count = Recipe.get_recents(6, 6 * (pagenumber - 1))
     for recipe in recipes:
         recipe.desc = recipe.desc[:200]  # anasayfada sadece max 200 kararkter göster
+        if len(recipe.desc) == 0:
+            recipe.desc = "No Description"
         if recipe.desc[-1] == ' ':
             recipe.desc = recipe.desc[:-1]
         recipe.desc += "..."
@@ -59,13 +61,15 @@ def show_recipe(recipeID):
     print("method:",request.method)
     if request.method == 'GET':
         recipe = Recipe.get_recipe(recipeID)
-        recipe.increment_clickcount()
+        if current_user.id != recipe.user.id:
+            recipe.increment_clickcount()
         ingredients = Recipe.get_ingredients(recipe)
         userrating = recipe.get_user_rate(current_user.id)
         userrating = round(userrating * 5) / 5
-        return render_template('recipe.html',recipe=recipe,ingredients=ingredients, userrating=userrating, hisrecipe=(current_user.id == recipe.user.id))
+        comments = recipe.get_comments()
+        return render_template('recipe.html',recipe=recipe,ingredients=ingredients, userrating=userrating, hisrecipe=(current_user.id == recipe.user.id), comments=comments)
     else:
-        Recipe.insert_rate_comment(recipeID,request.form['rate'],'comment',current_user.id)
+        Recipe.insert_rate_comment(recipeID, request.form['rate'], request.form['comment'], current_user.id)
         return redirect(url_for('site.show_recipe',recipeID=recipeID))
 
 @site.route('/logout')
