@@ -194,24 +194,24 @@ class Recipe:
 
 			cursor.close()
 
+	def get_user_rate(self, userid):
+		rate = 0
+		with dbapi2.connect(database.config) as connection:
+			cursor = connection.cursor()
+			query = "SELECT Rate FROM RateCommentInfo WHERE RecipeID = %d AND userid = %s" % (self.id, userid)
+			try:
+				cursor.execute(query)
+				rate = cursor.fetchone()
+				if rate is not None:
+					rate = rate[0]
+				else:
+					rate = 0
+			except dbapi2.Error as err:
+				print("get_user_rate Error:", err)
+				connection.rollback()
+			else:
+				connection.commit()
 
+			cursor.close()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		return rate
