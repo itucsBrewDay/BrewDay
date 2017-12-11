@@ -15,13 +15,13 @@ class Recipe:
 		cls.clickCount = clickCount
 
 	@staticmethod
-	def add(user, name, desc, procedure, malt=0, water=0, sugar=0): # eklenen Recipe'leri uygun map'lere de ekle!!!
+	def add(userid, name, desc, procedure, malt=0, water=0, sugar=0): # eklenen Recipe'leri uygun map'lere de ekle!!!
 		with dbapi2.connect(database.config) as connection:
 			cursor = connection.cursor()
 			query = """INSERT INTO RecipeInfo ( userid, Name, description, procedure, clickcount, CreateDate) VALUES (%s,%s,%s,%s,%s,%s) RETURNING recipeid"""
 			recipeid = None
 			try:
-				cursor.execute(query, (user.id, name, desc, procedure, 0, datetime.datetime.now()))
+				cursor.execute(query, (userid, name, desc, procedure, 0, datetime.datetime.now()))
 				recipeid = cursor.fetchone()[0]
 			except dbapi2.Error as err:
 				print("Recipe Add Error:", err)

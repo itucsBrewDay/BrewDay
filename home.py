@@ -14,7 +14,6 @@ from user import UserLogin
 from Recipe import Recipe
 from Profile import Profile
 from ingredient import IngredientDatabase, IngredientMapDatabase
-from recipeV2 import RecipeDatabase, RecipeMapDatabase
 from equipment import EquipmentDatabase, EquipmentTypeDatabase
 
 site = Blueprint('site', __name__)
@@ -27,7 +26,7 @@ def initialize_database():
     database.init_db()
     UserLogin.init_admin()
     for r in range(1, 19):
-        Recipe.add(UserLogin.select_user("admin"), "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
+        Recipe.add(UserLogin.select_user("admin").id, "Recipe%r" % r, loremipsum, "Procedure of Recipe%r" % r)
 
     return redirect(url_for('site.home_page'))
 
@@ -217,13 +216,7 @@ def profile_recipe_add():
 
             ingredient.append(request.form[ingredientid])
 
-        recipeID = RecipeDatabase.addRecipe(recipeName, description, procedure)
-        for i in ingredientIdList:
-            RecipeMapDatabase.addRecipe(recipeID, i, ingredient[i - 1])
-        # query = "INSERT INTO PARAMETERS(TYPEID,NAME) VALUES('%d', '%s')" % (TYPE, parameterName)
-        # cursor.execute(query)
-
-        # connection.commit()
+        Recipe.add(current_user.id, recipeName, description, procedure, ingredient[0], ingredient[1], ingredient[2])
 
         return redirect(url_for('site.profile_page'))
 
