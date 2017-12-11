@@ -22,7 +22,6 @@ class RecipeTest(unittest.TestCase):
         status = UserLogin.get_status(int(user.get_id()))
         self.assertEqual("Beginner Brewer",status)
 
-
     def test_getstatus_score_3(self):
         database.create_tables()
         UserLogin.add_user('test','test','test','test','test')

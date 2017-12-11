@@ -22,7 +22,7 @@ class RecipeTest(unittest.TestCase):
         self.assertEqual(recipeone.id, 1)
 
 
-    def test_get_all(self):
+    def test_get_all_recipes(self):
         database.create_tables()
         UserLogin.add_user('test', 'test', 'test', 'test', 'test')
         user = UserLogin.select_user('test')
