@@ -1,6 +1,7 @@
 import unittest
 
 from Recipe import Recipe
+from user import UserLogin
 
 
 class RecipeTest(unittest.TestCase):
@@ -9,11 +10,14 @@ class RecipeTest(unittest.TestCase):
         self.assertTrue(True)
 
     def test_incrementClick(self):
+        UserLogin.add_user('test','test','test','test','test')
+        user = UserLogin.select_user('test')
+        Recipe.add(user,'test',1,'test',0,0,0)
         recipe = Recipe.get_recipe(1)
         a = recipe.clickCount
         recipe.increment_clickcount()
         b = recipe.clickCount
-        self.assertEqual(a,b-1)
+        self.assertEquals(a,b-1)
 
 
 
