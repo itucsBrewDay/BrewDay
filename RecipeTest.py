@@ -17,7 +17,16 @@ class RecipeTest(unittest.TestCase):
         a = recipe.clickCount
         recipe.increment_clickcount()
         b = recipe.clickCount
-        self.assertEquals(a,b-1)
+        self.assertEqual(a,b-1)
+
+    def test_getrecipe(self):
+        UserLogin.add_user('test', 'test', 'test', 'test', 'test')
+        user = UserLogin.select_user('test')
+        Recipe.add(user, 'test', 1, 'test', 0, 0, 0)
+        recipeone = Recipe.get_recipe(1)
+        self.assertEqual(recipeone.id, 1)
+
+
 
 
 
