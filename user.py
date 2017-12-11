@@ -134,7 +134,7 @@ class UserLogin:
             status = 0
         status = float("{0:.2f}".format(status))
 
-        if 1 <= status < 2.5:
+        if 0 <= status < 2.5:
             return "Beginner Brewer"
         elif 2.5 <= status < 4:
             return "Intermediate Brewer"
