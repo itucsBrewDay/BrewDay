@@ -51,40 +51,52 @@
         </form>
         {% endif %}
         <div class="row">
-            <div>
-                <div class="col-lg-offset-0 col-lg-8 col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title recipe-title">
-                                Score: {{ recipe.get_score() }}<br>
-                                Clicks: {{ recipe.clickCount }}
-                            </h5>
-                            <h3 class="card-title recipe-title"> Description </h3>
-                            <p class="card-text">{{ recipe.desc }}</p>
-                            <h3 class="card-title recipe-title"> Ingredients </h3>
+            <div class="col-lg-offset-0 col-lg-8 col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10 recipe-info-item">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title recipe-title">
+                            Score: {{ recipe.get_score() }}<br>
+                            Clicks: {{ recipe.clickCount }}
+                        </h5>
+                        <h3 class="card-title recipe-title"> Description </h3>
+                        <p class="card-text">{{ recipe.desc }}</p>
+                        <h3 class="card-title recipe-title"> Ingredients </h3>
 
-                            {% for i in ingredients %}
-                            <p class="card-text" style="color: black;">{{ i }} Amount: {{ ingredients[i] }}</p>
-                            {% endfor %}
+                        {% for i in ingredients %}
+                        <p class="card-text" style="color: black;">{{ i }} Amount: {{ ingredients[i] }}</p>
+                        {% endfor %}
 
-                            <h3 class="card-title recipe-title"> Procedure </h3>
+                        <h3 class="card-title recipe-title"> Procedure </h3>
+                        <div class="col-sm-6">
                             <p class="card-text">{{ recipe.procedure }}</p>
                         </div>
+                        <div class="col-sm-6">
+                            <a class="btn btn-default btn-xs pull-right" href="/apply_recipe/{{ recipe.id }}">
+                                <span class="glyphicon glyphicon-ok">Apply</span>
+                            </a>
+                        </div>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for message in messages %}
+                                <p class="pull-right">{{ message }}</pclass>
+                            {% endfor %}
+                            {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
-                <div class="col-lg-offset-0 col-lg-4 col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10"> <!-- Comments -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="card-title recipe-title" style="box-shadow: 0px 10px 10px grey; border-radius: 10px;"><span style="margin-left:30px;"> Comments</span> </h1>
-                            <div class="comments">
-                                
-                                {% for c in comments %}
-                                <hr style="border-top: 3px solid #888888;"/>
-                                <h3 class="card-title recipe-title">{{ c[0] }}</h3>
-                                <h5 class="card-title recipe-title"> Rate: {{ c[1] }}</h5>
-                                <blockquote class="card-text" style="color: black; margin-left: 10px;">{{ c[2] }}</blockquote>
-                                {% endfor %}
-                            </div>
+            </div>
+            <div class="col-lg-offset-0 col-lg-4 col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10 recipe-info-item"> <!-- Comments -->
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title recipe-title" style="box-shadow: 0px 10px 10px grey; border-radius: 10px;"><span style="margin-left:30px;"> Comments</span> </h1>
+                        <div class="comments">
+
+                            {% for c in comments %}
+                            <hr style="border-top: 3px solid #888888;"/>
+                            <h3 class="card-title recipe-title">{{ c[0] }}</h3>
+                            <h5 class="card-title recipe-title"> Rate: {{ c[1] }}</h5>
+                            <blockquote class="card-text" style="color: black; margin-left: 10px;">{{ c[2] }}</blockquote>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

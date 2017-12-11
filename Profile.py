@@ -268,6 +268,9 @@ class Profile():
                 userIngredientInfo = cursor.fetchall()
                 connection.commit()
 
+        if len(recipeIngredientInfo) > len(userIngredientInfo):
+            return "Not enough ingredients"
+
         ctrl = 0
         for i in recipeIngredientInfo:
             for j in userIngredientInfo:
@@ -291,4 +294,4 @@ class Profile():
                         else:
                             connection.commit()
             cursor.close()
-            return "Successful"
+            return "Successfully Applied"

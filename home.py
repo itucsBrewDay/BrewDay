@@ -6,7 +6,7 @@ from passlib.apps import custom_app_context as pwd_context
 from flask import render_template
 from flask import request
 from flask import redirect
-from flask import url_for
+from flask import url_for, flash
 from flask_login import login_user, current_user, login_required, logout_user
 from math import ceil
 
@@ -58,7 +58,6 @@ def home_page():
 @site.route('/recipe/<int:recipeID>',methods=['GET','POST'])
 @login_required
 def show_recipe(recipeID):
-    print("method:",request.method)
     if request.method == 'GET':
         recipe = Recipe.get_recipe(recipeID)
         if current_user.id != recipe.user.id:
@@ -151,10 +150,15 @@ def profile_recipe_delete(recipeID):
 @site.route('/profile/apply/<int:recipeID>', methods=['GET', 'POST'])
 @login_required
 def profile_apply_recipe(recipeID):
-
     retval = Profile.recipeApply(recipeID)
     return redirect(url_for('site.profile_page'))
 
+@site.route('/apply_recipe/<int:recipeID>', methods=['GET', 'POST'])
+@login_required
+def recipe_apply_recipe(recipeID):
+    retval = Profile.recipeApply(recipeID)
+    flash(retval)
+    return redirect(url_for('site.show_recipe', recipeID=recipeID))
 
 @site.route('/profile/edit/<int:userID>/', methods=['GET', 'POST'])
 @login_required

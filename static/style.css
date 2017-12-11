@@ -548,3 +548,7 @@ label.rb10l:hover ~ .rating
 .rating-button{
     margin-bottom: 30px;
 }
+
+.recipe-info-item {
+    padding-top: 40px;
+}
