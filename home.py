@@ -32,6 +32,10 @@ def initialize_database():
     return redirect(url_for('site.home_page'))
 
 
+@site.route('/about')
+def about_page():
+    return render_template('about.html')
+
 @site.route('/<int:pagenumber>')
 def home_page_number(pagenumber):
     if pagenumber < 1:
